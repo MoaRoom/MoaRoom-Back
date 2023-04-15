@@ -1,6 +1,7 @@
 package sookmyung.moaroom.Model;
 
 import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,9 @@ import java.util.UUID;
 
 @Entity
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class Users {
     @Id
     @NotNull
