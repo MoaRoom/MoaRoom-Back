@@ -21,7 +21,6 @@ public class UserService {
                 throw new Exception("new user 필수 정보 미입력");
             }
 
-            System.out.println(data);
             Users newUser = new Users();
             newUser.setUser_id(UUID.randomUUID());
             newUser.setId(String.valueOf(data.get("id")));
@@ -36,8 +35,11 @@ public class UserService {
                 newUser.setRole(2);
             }
 
-            if (!data.get("num").isJsonNull()) {
+            if (data.has("num")) {
                 newUser.setUser_num(data.get("num").getAsInt());
+            } else{
+                System.out.println(newUser);
+                newUser.setUser_num(null);
             }
             userRepository.save(newUser);
             return "새로운 사용자 등록 완료";
@@ -66,8 +68,10 @@ public class UserService {
                 existUser.setRole(2);
             }
 
-            if(!data.get("num").isJsonNull()){
+            if(data.has("num")){
                 existUser.setUser_num(data.get("num").getAsInt());
+            }else{
+                existUser.setUser_num(null);
             }
             return userRepository.save(existUser);
         } catch (Exception e){
