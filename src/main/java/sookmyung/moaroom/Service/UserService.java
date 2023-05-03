@@ -22,7 +22,7 @@ public class UserService {
             }
 
             Users newUser = new Users();
-            newUser.setUser_id(UUID.randomUUID());
+            newUser.setUserId(UUID.randomUUID());
             newUser.setId(String.valueOf(data.get("id")));
             newUser.setPassword(String.valueOf(data.get("pwd")));
             newUser.setName(String.valueOf(data.get("name")));
@@ -36,10 +36,10 @@ public class UserService {
             }
 
             if (data.has("num")) {
-                newUser.setUser_num(data.get("num").getAsInt());
+                newUser.setUserNum(data.get("num").getAsInt());
             } else{
                 System.out.println(newUser);
-                newUser.setUser_num(null);
+                newUser.setUserNum(null);
             }
             userRepository.save(newUser);
             return "새로운 사용자 등록 완료";
@@ -69,9 +69,9 @@ public class UserService {
             }
 
             if(data.has("num")){
-                existUser.setUser_num(data.get("num").getAsInt());
+                existUser.setUserNum(data.get("num").getAsInt());
             }else{
-                existUser.setUser_num(null);
+                existUser.setUserNum(null);
             }
             return userRepository.save(existUser);
         } catch (Exception e){
