@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import sookmyung.moaroom.Model.Lecture;
+import sookmyung.moaroom.Service.EnrollService;
 import sookmyung.moaroom.Service.LectureService;
 
 import java.util.List;
@@ -15,6 +16,8 @@ public class LectureController {
 
     @Autowired
     LectureService lectureService;
+    @Autowired
+    EnrollService enrollService;
 
     @PostMapping("/lecture/new")
     public String addLecture(@RequestBody Map<String, String> data){
@@ -51,5 +54,19 @@ public class LectureController {
     @DeleteMapping("/lecture/{lecture_id}")
     public String deleteLecture(@PathVariable("lecture_id") String id, @RequestParam("professor_id") String professor_id){
         return lectureService.delete(id, professor_id);
+    }
+
+    @PostMapping("/lecture/enroll")
+    public String enrollLecture(@RequestBody Map<String, String> data){
+        JsonObject enroll = new JsonObject();
+        enroll.addProperty("lecture_id", data.get("lecture_id"));
+        enroll.addProperty("student_id", data.get("student_id"));
+
+        return enrollService.save(enroll);
+    }
+
+    @GetMapping("/lecture/list/{lecture_id}")
+    public String studentList(@PathVariable("lecture_id") String id){
+        return enrollService.findStudentList(id);
     }
 }
