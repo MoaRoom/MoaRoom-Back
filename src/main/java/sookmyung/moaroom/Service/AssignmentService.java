@@ -5,6 +5,7 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sookmyung.moaroom.Dto.requestAssignmentDto;
 import sookmyung.moaroom.Model.Assignment;
 import sookmyung.moaroom.Model.AssignmentPK;
 import sookmyung.moaroom.Respository.AssignmentRepository;
@@ -20,76 +21,58 @@ public class AssignmentService {
     @Autowired
     AssignmentRepository assignmentRepository;
 
-    public String save(JsonObject data) {
-        try {
-            if (data.get("title").isJsonNull() || data.get("lecture_id").isJsonNull()) {
-                throw new Exception("new Assignment 필수 정보 미입력");
-            }
-
+    public String save(requestAssignmentDto data) {
             Assignment newAssignment = new Assignment();
             newAssignment.setAssignmentId(UUID.randomUUID());
-            newAssignment.setTitle(String.valueOf(data.get("title")));
+            newAssignment.setTitle(data.getTitle());
+            newAssignment.setLectureId(data.getLectureId());
 
-            // professor_id에 따옴표도 포함되어 있으므로, 슬라이싱으로 제거 후 UUID로 변환해야함
-            String lecture_id = data.get("lecture_id").toString();
-            newAssignment.setLectureId(UUID.fromString(lecture_id.substring(1,37)));
-
-            if (data.has("start_date")) {
-                LocalDateTime startDate = stringToDate(String.valueOf(data.get("start_date")));
-                newAssignment.setStartDate(startDate);
-            } else{
+            if (data.getStartDate()==null) {
                 LocalDateTime now = LocalDateTime.now();
                 newAssignment.setStartDate(now);
+            } else{
+                newAssignment.setStartDate(data.getStartDate());
             }
 
-            if (data.has("due_date")) {
-                LocalDateTime dueDate = stringToDate(String.valueOf(data.get("due_date")));
-                newAssignment.setDueDate(dueDate);
+            if (data.getDueDate()!=null) {
+                newAssignment.setDueDate(data.getDueDate());
             } else{
                 newAssignment.setDueDate(null);
             }
 
-            if (data.has("description")) {
-                newAssignment.setDescription(String.valueOf(data.get("description")));
+            if (data.getDescription()!=null) {
+                newAssignment.setDescription(data.getDescription());
             } else{
                 newAssignment.setDescription(null);
             }
 
             assignmentRepository.save(newAssignment);
             return "새로운 과제 등록 완료";
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "err: "+e.getMessage();
-        }
     }
 
-    public Assignment modify(String assignment_id, JsonObject data){
+    public Assignment modify(String assignment_id, requestAssignmentDto data){
         try{
             AssignmentPK assignmentPK = new AssignmentPK();
             assignmentPK.setAssignmentId(UUID.fromString(assignment_id));
-            // lecture_id에 따옴표도 포함되어 있으므로, 슬라이싱으로 제거 후 UUID로 변환해야함
-            String lecture_id = data.get("lecture_id").toString();
-            assignmentPK.setLectureId(UUID.fromString(lecture_id.substring(1,37)));
+            assignmentPK.setLectureId(data.getLectureId());
+            System.out.println(assignmentPK);
             Assignment existAssignment = assignmentRepository.findById(assignmentPK).get();
+            System.out.println(existAssignment);
             if (assignmentRepository.findById(assignmentPK).isEmpty()){
                 throw new Exception("존재하지 않는 과제");
             }
 
-            existAssignment.setTitle(String.valueOf(data.get("title")));
+            existAssignment.setTitle(data.getTitle());
 
-            LocalDateTime startDate = stringToDate(String.valueOf(data.get("start_date")));
-            existAssignment.setStartDate(startDate);
-
-            System.out.println(data.get("due_date").getClass().getName());
-            if (data.get("due_date").isJsonNull()){
-                existAssignment.setDueDate(null);
-            } else{
-                LocalDateTime dueDate = stringToDate(String.valueOf(data.get("due_date")));
-                existAssignment.setDueDate(dueDate);
+            if (data.getStartDate()!=null) {
+                existAssignment.setStartDate(data.getStartDate());
             }
-
-
-            existAssignment.setDescription(String.valueOf(data.get("description")));
+            if (data.getDueDate()!=null) {
+                existAssignment.setDueDate(data.getDueDate());
+            }
+            if (data.getDescription()!=null) {
+                existAssignment.setDescription(data.getDescription());
+            }
 
             return assignmentRepository.save(existAssignment);
         } catch (Exception e){
@@ -136,18 +119,5 @@ public class AssignmentService {
         } catch (Exception e){
             return "err: "+e.getMessage();
         }
-    }
-
-    public LocalDateTime stringToDate(String strDate) throws ParseException {
-        System.out.println("1: "+strDate);
-        strDate = strDate.substring(1,20);
-        System.out.println("2: "+strDate);
-        LocalDateTime date = LocalDateTime.parse(strDate, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        return date;
-    }
-
-    public String dateToString(LocalDateTime date){
-        String strDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        return strDate;
     }
 }

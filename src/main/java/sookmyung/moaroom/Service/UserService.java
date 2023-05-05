@@ -3,6 +3,7 @@ package sookmyung.moaroom.Service;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sookmyung.moaroom.Dto.requestUserDto;
 import sookmyung.moaroom.Model.Role;
 import sookmyung.moaroom.Model.Users;
 import sookmyung.moaroom.Respository.UserRepository;
@@ -15,63 +16,51 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public String save(JsonObject data) {
-        try {
-            if (data.get("id").isJsonNull() || data.get("pwd").isJsonNull() || data.get("name").isJsonNull() || data.get("role").isJsonNull()) {
-                throw new Exception("new user 필수 정보 미입력");
-            }
-
+    public String save(requestUserDto data) {
             Users newUser = new Users();
             newUser.setUserId(UUID.randomUUID());
-            newUser.setId(String.valueOf(data.get("id")));
-            newUser.setPassword(String.valueOf(data.get("pwd")));
-            newUser.setName(String.valueOf(data.get("name")));
+            newUser.setId(data.getId());
+            newUser.setPassword(data.getPassword());
+            newUser.setName(data.getName());
 
-            if (data.get("role").getAsInt() == Role.STUDENT.getRole()) {
+            if (data.getRole() == Role.STUDENT.getRole()) {
                 newUser.setRole(0);
-            } else if (data.get("role").getAsInt() == Role.ASSISTANT.getRole()) {
+            } else if (data.getRole() == Role.ASSISTANT.getRole()) {
                 newUser.setRole(1);
             } else {
                 newUser.setRole(2);
             }
 
-            if (data.has("num")) {
-                newUser.setUserNum(data.get("num").getAsInt());
+            if (data.getUserNum() != null) {
+                newUser.setUserNum(data.getUserNum());
             } else{
-                System.out.println(newUser);
                 newUser.setUserNum(null);
             }
             userRepository.save(newUser);
             return "새로운 사용자 등록 완료";
-        } catch (Exception e) {
-            return "err: "+e.getMessage();
-        }
     }
 
-    public Users modify(String user_id, JsonObject data){
+    public Users modify(String user_id, requestUserDto data){
         try{
-
             Users existUser = userRepository.findById(UUID.fromString(user_id)).get();
-            if (userRepository.findById(UUID.fromString(user_id)).isEmpty()){
+            if (existUser == null){
                 throw new Exception("존재하지 않는 사용자");
             }
 
-            existUser.setId(String.valueOf(data.get("id")));
-            existUser.setPassword(String.valueOf(data.get("pwd")));
-            existUser.setName(String.valueOf(data.get("name")));
+            existUser.setId(data.getId());
+            existUser.setPassword(data.getPassword());
+            existUser.setName(data.getName());
 
-            if (data.get("role").getAsInt() == Role.STUDENT.getRole()) {
+            if (data.getRole() == Role.STUDENT.getRole()) {
                 existUser.setRole(0);
-            } else if (data.get("role").getAsInt() == Role.ASSISTANT.getRole()) {
+            } else if (data.getRole() == Role.ASSISTANT.getRole()) {
                 existUser.setRole(1);
             } else {
                 existUser.setRole(2);
             }
 
-            if(data.has("num")){
-                existUser.setUserNum(data.get("num").getAsInt());
-            }else{
-                existUser.setUserNum(null);
+            if(data.getUserNum() != null){
+                existUser.setUserNum(data.getUserNum());
             }
             return userRepository.save(existUser);
         } catch (Exception e){
