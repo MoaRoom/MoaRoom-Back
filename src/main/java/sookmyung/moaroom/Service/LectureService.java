@@ -3,6 +3,7 @@ package sookmyung.moaroom.Service;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sookmyung.moaroom.Dto.requestLectureDto;
 import sookmyung.moaroom.Model.Lecture;
 import sookmyung.moaroom.Respository.LectureRepository;
 
@@ -14,22 +15,19 @@ public class LectureService {
     @Autowired
     LectureRepository lectureRepository;
 
-    public String save(JsonObject data) {
+    public String save(requestLectureDto data) {
         try {
-            if (data.get("title").isJsonNull() || data.get("professor_id").isJsonNull() || data.get("room").isJsonNull()) {
-                throw new Exception("new Lecture 필수 정보 미입력");
-            }
-
-            System.out.println("Save");
-            System.out.println(data);
             Lecture newLecture = new Lecture();
-            newLecture.setLecture_id(UUID.randomUUID());
-            newLecture.setTitle(String.valueOf(data.get("title")));
+            newLecture.setLectureId(UUID.randomUUID());
+            newLecture.setTitle(data.getTitle());
+            newLecture.setProfessorId(data.getProfessorId());
+            newLecture.setRoom(data.getRoom());
 
-            // professor_id에 따옴표도 포함되어 있으므로, 슬라이싱으로 제거 후 UUID로 변환해야함
-            String professor_id = data.get("professor_id").toString();
-            newLecture.setProfessor_id(UUID.fromString(professor_id.substring(1,37)));
-            newLecture.setRoom(data.get("room").getAsInt());
+            if (data.getRoomCount()!= null){
+                newLecture.setRoomCount(data.getRoomCount());
+            } else {
+                newLecture.setRoomCount(30);
+            }
 
             lectureRepository.save(newLecture);
             return "새로운 강의 등록 완료";
@@ -39,22 +37,24 @@ public class LectureService {
         }
     }
 
-    public Lecture modify(String lecture_id, JsonObject data){
+    public Lecture modify(String lecture_id, requestLectureDto data){
         try{
 
             Lecture existLecture = lectureRepository.findById(UUID.fromString(lecture_id)).get();
             if (lectureRepository.findById(UUID.fromString(lecture_id)).isEmpty()){
                 throw new Exception("존재하지 않는 강의");
             }
-            if (data.get("professor_id").equals(existLecture.getProfessor_id().toString())){
+            if (!data.getProfessorId().equals(existLecture.getProfessorId())){
                 throw new Exception("수정 권한이 없는 사용자");
             }
 
-            existLecture.setTitle(String.valueOf(data.get("title")));
-            existLecture.setRoom(data.get("room").getAsInt());
+            existLecture.setTitle(data.getTitle());
+            existLecture.setRoom(data.getRoom());
+            existLecture.setRoomCount(data.getRoomCount());
 
             return lectureRepository.save(existLecture);
         } catch (Exception e){
+            e.printStackTrace();
             System.out.println("err: "+e.getMessage());
         }
         return null;
@@ -91,7 +91,7 @@ public class LectureService {
             if(lectureRepository.findById(UUID.fromString(id)).isEmpty()){
                 throw new Exception("존재하지 않는 강의");
             }
-            if (!lectureRepository.findById(UUID.fromString(id)).get().getProfessor_id().toString().equals(professor_id)){
+            if (!lectureRepository.findById(UUID.fromString(id)).get().getProfessorId().toString().equals(professor_id)){
                 throw new Exception("삭제 권한이 없는 사용자");
             }
 

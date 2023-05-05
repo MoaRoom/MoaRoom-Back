@@ -2,7 +2,11 @@ package sookmyung.moaroom.Controller;
 
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import sookmyung.moaroom.Dto.requestEnrollDto;
+import sookmyung.moaroom.Dto.requestLectureDto;
+import sookmyung.moaroom.Dto.responseEnrollDto;
 import sookmyung.moaroom.Model.Lecture;
 import sookmyung.moaroom.Service.EnrollService;
 import sookmyung.moaroom.Service.LectureService;
@@ -20,24 +24,12 @@ public class LectureController {
     EnrollService enrollService;
 
     @PostMapping("/lecture/new")
-    public String addLecture(@RequestBody Map<String, String> data){
-        JsonObject newLecture = new JsonObject();
-        newLecture.addProperty("title", data.get("title"));
-        newLecture.addProperty("professor_id", data.get("professor_id"));
-        newLecture.addProperty("room", data.get("room"));
-
-        System.out.println("new Lecture");
-        System.out.println(newLecture);
+    public String addLecture(@Validated @RequestBody requestLectureDto newLecture){
         return lectureService.save(newLecture);
     }
 
     @PutMapping("/lecture/{lecture_id}")
-    public Lecture updateLecture(@PathVariable(name = "lecture_id") String id, @RequestBody Map<String, String> data){
-        JsonObject existLecture = new JsonObject();
-        existLecture.addProperty("title", data.get("title"));
-        existLecture.addProperty("room", data.get("room"));
-        existLecture.addProperty("professor_id", data.get("professor_id"));
-
+    public Lecture updateLecture(@PathVariable(name = "lecture_id") String id, @Validated @RequestBody requestLectureDto existLecture){
         return lectureService.modify(id, existLecture);
     }
 
@@ -57,16 +49,12 @@ public class LectureController {
     }
 
     @PostMapping("/lecture/enroll")
-    public String enrollLecture(@RequestBody Map<String, String> data){
-        JsonObject enroll = new JsonObject();
-        enroll.addProperty("lecture_id", data.get("lecture_id"));
-        enroll.addProperty("student_id", data.get("student_id"));
-
+    public String enrollLecture(@Validated @RequestBody requestEnrollDto enroll){
         return enrollService.save(enroll);
     }
 
     @GetMapping("/lecture/list/{lecture_id}")
-    public String studentList(@PathVariable("lecture_id") String id){
+    public List<responseEnrollDto> studentList(@PathVariable("lecture_id") String id){
         return enrollService.findStudentList(id);
     }
 }
