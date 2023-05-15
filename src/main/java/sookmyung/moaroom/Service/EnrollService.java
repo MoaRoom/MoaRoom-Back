@@ -18,6 +18,27 @@ public class EnrollService {
     @Autowired
     UserRepository userRepository;
 
+    public void enroll(UUID professorId, UUID lectureId){
+        Users professor = userRepository.findById(professorId).get();
+        if (professor.equals(null)){
+            try {
+                throw new Exception("존재하지 않는 사용자");
+            } catch (Exception e) {
+                System.out.println("err: "+e.getMessage());
+            }
+        }
+        if(professor.getClasses()==null){
+            ArrayList<String> newClass = new ArrayList<>();
+            newClass.add(lectureId.toString());
+            professor.setClasses(newClass);
+        } else{
+            ArrayList<String> classList = professor.getClasses();
+            classList.add(lectureId.toString());
+            professor.setClasses(classList);
+        }
+        userRepository.save(professor);
+    }
+
     public String save(requestEnrollDto data){
         try {
 

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 import sookmyung.moaroom.Model.Step;
 import sookmyung.moaroom.Model.StepPK;
 
+import java.util.UUID;
+
 @Repository
 public interface StepRepository extends JpaRepository<Step, StepPK> {
 }

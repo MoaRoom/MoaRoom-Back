@@ -20,33 +20,48 @@ import java.util.UUID;
 public class AssignmentService {
     @Autowired
     AssignmentRepository assignmentRepository;
+    @Autowired
+    StepService stepService;
 
     public String save(requestAssignmentDto data) {
-            Assignment newAssignment = new Assignment();
-            newAssignment.setAssignmentId(UUID.randomUUID());
-            newAssignment.setTitle(data.getTitle());
-            newAssignment.setLectureId(data.getLectureId());
+        int step = -1;
+        Assignment newAssignment = new Assignment();
+        newAssignment.setAssignmentId(UUID.randomUUID());
+        newAssignment.setTitle(data.getTitle().toString());
+        newAssignment.setLectureId(data.getLectureId());
+        if (data.getStartDate()==null) {
+            LocalDateTime now = LocalDateTime.now();
+            newAssignment.setStartDate(now);
+            step = 0;
+        } else{
+            newAssignment.setStartDate(data.getStartDate());
+            step = 1;
+        }
+        if (data.getDueDate()!=null) {
+            newAssignment.setDueDate(data.getDueDate());
+        } else{
+            newAssignment.setDueDate(null);
+        }
+        if (data.getDescription()!=null) {
+            newAssignment.setDescription(data.getDescription());
+        } else{
+            newAssignment.setDescription(null);
+        }
 
-            if (data.getStartDate()==null) {
-                LocalDateTime now = LocalDateTime.now();
-                newAssignment.setStartDate(now);
-            } else{
-                newAssignment.setStartDate(data.getStartDate());
-            }
+        assignmentRepository.save(newAssignment);
 
-            if (data.getDueDate()!=null) {
-                newAssignment.setDueDate(data.getDueDate());
-            } else{
-                newAssignment.setDueDate(null);
-            }
+        // 진행상황 반영
+        switch (step){
+            case 0: // 등록 시간 = 과제 시작 시간
+                stepService.startAssignmentNow(newAssignment.getLectureId(), newAssignment.getAssignmentId(), newAssignment.getDueDate());
+                break;
+            case 1:
+                stepService.startAssignmentLater(newAssignment.getLectureId(), newAssignment.getAssignmentId(), newAssignment.getStartDate(), newAssignment.getDueDate());
+                break;
+            default:
+                break;
+        }
 
-            if (data.getDescription()!=null) {
-                newAssignment.setDescription(data.getDescription());
-            } else{
-                newAssignment.setDescription(null);
-            }
-
-            assignmentRepository.save(newAssignment);
             return "새로운 과제 등록 완료";
     }
 
@@ -55,9 +70,7 @@ public class AssignmentService {
             AssignmentPK assignmentPK = new AssignmentPK();
             assignmentPK.setAssignmentId(UUID.fromString(assignment_id));
             assignmentPK.setLectureId(data.getLectureId());
-            System.out.println(assignmentPK);
             Assignment existAssignment = assignmentRepository.findById(assignmentPK).get();
-            System.out.println(existAssignment);
             if (assignmentRepository.findById(assignmentPK).isEmpty()){
                 throw new Exception("존재하지 않는 과제");
             }

@@ -2,6 +2,7 @@ package sookmyung.moaroom.Model;
 
 import com.sun.istack.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -9,19 +10,20 @@ import java.util.UUID;
 @Entity
 @Data
 @IdClass(StepPK.class)
+@NoArgsConstructor
 public class Step {
     @Id
     @Column(name = "assignment_id")
     @NotNull
-    private UUID assignment_id;
+    private UUID assignmentId;
     @Id
     @Column(name = "lecture_id")
     @NotNull
-    private Integer lecture_id;
+    private UUID lectureId;
     @Id
     @Column(name = "user_id")
     @NotNull
-    private UUID user_id;
+    private UUID userId;
     @NotNull
     @Column(name = "step")
     private Integer step;
