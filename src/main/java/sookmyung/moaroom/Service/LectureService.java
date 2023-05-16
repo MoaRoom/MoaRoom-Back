@@ -14,6 +14,8 @@ import java.util.UUID;
 public class LectureService {
     @Autowired
     LectureRepository lectureRepository;
+    @Autowired
+    EnrollService enrollService;
 
     public String save(requestLectureDto data) {
         try {
@@ -30,6 +32,9 @@ public class LectureService {
             }
 
             lectureRepository.save(newLecture);
+            enrollService.enroll(newLecture.getProfessorId(), newLecture.getLectureId());
+
+
             return "새로운 강의 등록 완료";
         } catch (Exception e) {
             e.printStackTrace();

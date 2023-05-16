@@ -1,10 +1,17 @@
 package sookmyung.moaroom.Model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.UUID;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class StepPK implements Serializable {
-    private UUID assignment_id;
-    private Integer lecture_id;
-    private UUID user_id;
+    private UUID assignmentId;
+    private UUID lectureId;
+    private UUID userId;
 }
