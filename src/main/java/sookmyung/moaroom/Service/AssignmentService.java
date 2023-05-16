@@ -63,10 +63,10 @@ public class AssignmentService {
         JSONObject reqBody = new JSONObject();
         reqBody.put("assignment_info", newAssignment);
         HttpEntity<String> request = new HttpEntity<String>(reqBody.toString(), headers);
-        ResponseEntity<Integer> response = restTemplate.postForEntity(
+        ResponseEntity<Boolean> response = restTemplate.postForEntity(
                 "https://localhost:8003/assignment/",
                 request,
-                Integer.class
+                Boolean.class
         );
 
         // 진행상황 반영
