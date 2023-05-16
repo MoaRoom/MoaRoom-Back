@@ -1,19 +1,16 @@
 package sookmyung.moaroom.Controller;
 
-import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sookmyung.moaroom.Dto.requestEnrollDto;
 import sookmyung.moaroom.Dto.requestLectureDto;
-import sookmyung.moaroom.Dto.responseEnrollDto;
 import sookmyung.moaroom.Model.Lecture;
+import sookmyung.moaroom.Model.Users;
 import sookmyung.moaroom.Service.EnrollService;
 import sookmyung.moaroom.Service.LectureService;
 
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @RestController
 public class LectureController {
@@ -54,7 +51,7 @@ public class LectureController {
     }
 
     @GetMapping("/lecture/list/{lecture_id}")
-    public List<responseEnrollDto> studentList(@PathVariable("lecture_id") String id){
+    public List<Users> studentList(@PathVariable("lecture_id") String id){
         return enrollService.findStudentList(id);
     }
 }

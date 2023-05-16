@@ -1,18 +1,20 @@
 package sookmyung.moaroom.Service;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import sookmyung.moaroom.Dto.requestAssignmentDto;
-import sookmyung.moaroom.Model.Assignment;
-import sookmyung.moaroom.Model.AssignmentPK;
+import sookmyung.moaroom.Model.*;
 import sookmyung.moaroom.Respository.AssignmentRepository;
+import sookmyung.moaroom.Respository.UrlRepository;
 
-import java.text.ParseException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +23,11 @@ public class AssignmentService {
     @Autowired
     AssignmentRepository assignmentRepository;
     @Autowired
+    UrlRepository urlRepository;
+    @Autowired
     StepService stepService;
+    @Autowired
+    EnrollService enrollService;
 
     public String save(requestAssignmentDto data) {
         int step = -1;
@@ -49,6 +55,19 @@ public class AssignmentService {
         }
 
         assignmentRepository.save(newAssignment);
+
+        // infra측에 req: users model, res: url model
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        JSONObject reqBody = new JSONObject();
+        reqBody.put("assignment_info", newAssignment);
+        HttpEntity<String> request = new HttpEntity<String>(reqBody.toString(), headers);
+        ResponseEntity<Integer> response = restTemplate.postForEntity(
+                "https://localhost:8003/assignment/",
+                request,
+                Integer.class
+        );
 
         // 진행상황 반영
         switch (step){
@@ -132,5 +151,19 @@ public class AssignmentService {
         } catch (Exception e){
             return "err: "+e.getMessage();
         }
+    }
+
+    public List<Url> findStudentUrlList(String id){
+        UUID lectureId = assignmentRepository.findByAssignmentId(UUID.fromString(id)).getLectureId();
+        List<Users> usersList = enrollService.findStudentList(lectureId.toString());
+        List<Url> studentUrlList = new ArrayList<>();
+        for (int i=0; i<usersList.size();i++){
+            Users student = usersList.get(i);
+            Url existUrl = urlRepository.findById(student.getUserId()).get();
+            if (existUrl != null){
+                studentUrlList.add(existUrl);
+            }
+        }
+        return studentUrlList;
     }
 }

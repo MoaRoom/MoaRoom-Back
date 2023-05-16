@@ -1,15 +1,14 @@
 package sookmyung.moaroom.Controller;
 
-import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sookmyung.moaroom.Dto.requestAssignmentDto;
 import sookmyung.moaroom.Model.Assignment;
+import sookmyung.moaroom.Model.Url;
 import sookmyung.moaroom.Service.AssignmentService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class AssignmentController {
@@ -40,5 +39,10 @@ public class AssignmentController {
     @DeleteMapping("/assignment/{assignment_id}")
     public String deleteAssignment(@PathVariable("assignment_id") String id){
         return assignmentService.delete(id);
+    }
+
+    @GetMapping("/assignment/list/{assignment_id}")
+    public List<Url> studentUrlList(@PathVariable("assignment_id") String id){
+        return assignmentService.findStudentUrlList(id);
     }
 }

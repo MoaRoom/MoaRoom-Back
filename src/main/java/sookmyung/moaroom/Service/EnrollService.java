@@ -1,12 +1,15 @@
 package sookmyung.moaroom.Service;
 
-import com.google.gson.JsonObject;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import sookmyung.moaroom.Dto.requestEnrollDto;
-import sookmyung.moaroom.Dto.responseEnrollDto;
 import sookmyung.moaroom.Model.Role;
+import sookmyung.moaroom.Model.Url;
 import sookmyung.moaroom.Model.Users;
+import sookmyung.moaroom.Respository.UrlRepository;
 import sookmyung.moaroom.Respository.UserRepository;
 
 import java.util.ArrayList;
@@ -17,6 +20,8 @@ import java.util.UUID;
 public class EnrollService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UrlRepository urlRepository;
 
     public void enroll(UUID professorId, UUID lectureId){
         Users professor = userRepository.findById(professorId).get();
@@ -56,26 +61,37 @@ public class EnrollService {
                existUser.setClasses(classList);
             }
             userRepository.save(existUser);
+
+              // infra측에 req: users model, res: url model
+                    RestTemplate restTemplate = new RestTemplate();
+            JSONObject reqBody = new JSONObject();
+            reqBody.put("student_info", existUser);
+            reqBody.put("lecture_id",data.getLectureId());
+            ResponseEntity<Url> response = restTemplate.postForEntity(
+                    "https://localhost:8003/student/",
+                    reqBody,
+                    Url.class
+            );
+
+            // url 테이블에 저장
+            Url newUrl = response.getBody();
+            urlRepository.save(newUrl);
+
             return "강의 신청 완료";
         } catch (Exception e){
             return "err: "+e.getMessage();
         }
     }
 
-    public List<responseEnrollDto> findStudentList(String lecture_id){
+    public List<Users> findStudentList(String lecture_id){
         List<Users> studentList = userRepository.findByRole(Role.STUDENT.getRole());
-        List<responseEnrollDto> studentListInLecture = new ArrayList<>();
+        List<Users> studentListInLecture = new ArrayList<>();
         for (int i = 0; i<studentList.size(); i++){
             Users student = studentList.get(i);
             if(student.getClasses()!=null && student.getClasses().contains(lecture_id)){
-                responseEnrollDto studentData = new responseEnrollDto();
-                studentData.setStudentId(student.getUserId());
-                studentData.setId(student.getId());
-                studentData.setName(student.getName());
-                studentListInLecture.add(studentData);
+                studentListInLecture.add(student);
             }
         }
-
         return studentListInLecture;
     }
 }
