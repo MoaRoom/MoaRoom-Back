@@ -1,11 +1,15 @@
 package sookmyung.moaroom.Service;
 
-import com.google.gson.JsonObject;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import sookmyung.moaroom.Dto.requestUserDto;
 import sookmyung.moaroom.Model.Role;
+import sookmyung.moaroom.Model.Url;
 import sookmyung.moaroom.Model.Users;
+import sookmyung.moaroom.Respository.UrlRepository;
 import sookmyung.moaroom.Respository.UserRepository;
 
 import java.util.List;
@@ -15,6 +19,8 @@ import java.util.UUID;
 public class UserService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UrlRepository urlRepository;
 
     public String save(requestUserDto data) {
             Users newUser = new Users();
@@ -37,6 +43,28 @@ public class UserService {
                 newUser.setUserNum(null);
             }
             userRepository.save(newUser);
+
+            if(newUser.getRole() == Role.PROFESSOR.getRole()){
+
+                // infra측에 req: users model, res: url model
+                RestTemplate restTemplate = new RestTemplate();
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+
+                JSONObject reqBody = new JSONObject();
+                reqBody.put("professor_info", newUser);
+                HttpEntity<String> request = new HttpEntity<String>(reqBody.toString(), headers);
+
+                ResponseEntity<Url> response = restTemplate.postForEntity(
+                        "https://localhost:8003/professor/",
+                        request,
+                        Url.class
+                );
+
+                // url 테이블에 저장
+                Url newUrl = response.getBody();
+                urlRepository.save(newUrl);
+            }
             return "새로운 사용자 등록 완료";
     }
 

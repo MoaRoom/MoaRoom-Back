@@ -2,10 +2,10 @@ package sookmyung.moaroom.Respository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import sookmyung.moaroom.Model.Step;
-import sookmyung.moaroom.Model.StepPK;
+import sookmyung.moaroom.Model.Url;
 
+import java.util.UUID;
 
 @Repository
-public interface StepRepository extends JpaRepository<Step, StepPK> {
+public interface UrlRepository extends JpaRepository<Url, UUID>{
 }
