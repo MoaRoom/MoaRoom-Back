@@ -23,4 +23,7 @@ public class Url {
     @NotNull
     @Column(name = "container_address")
     private String containerAddress;
+
+    @Column(name = "api_endpoint")
+    private String apiEndpoint;
 }
