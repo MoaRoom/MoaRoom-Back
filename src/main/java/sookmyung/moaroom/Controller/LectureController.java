@@ -5,6 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sookmyung.moaroom.Dto.requestEnrollDto;
 import sookmyung.moaroom.Dto.requestLectureDto;
+import sookmyung.moaroom.Dto.responseLectureDto;
 import sookmyung.moaroom.Model.Lecture;
 import sookmyung.moaroom.Model.Users;
 import sookmyung.moaroom.Service.EnrollService;
@@ -30,9 +31,9 @@ public class LectureController {
         return lectureService.modify(id, existLecture);
     }
 
-    @GetMapping("/lecture/all")
-    public List<Lecture> allLecture(){
-        return lectureService.findAll();
+    @GetMapping("/lecture/all/{user_id}")
+    public List<responseLectureDto> allLecture(@PathVariable(name = "user_id") String id){
+        return lectureService.findAll(id);
     }
 
     @GetMapping("/lecture/{lecture_id}")
