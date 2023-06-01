@@ -134,4 +134,11 @@ public class UserService {
             return "err: "+e.getMessage();
         }
     }
+
+    public Url getUrl(String id){
+        if(urlRepository.findById(UUID.fromString(id)).get() != null){
+               return urlRepository.findById(UUID.fromString(id)).get();
+        }
+        return null;
+    }
 }
