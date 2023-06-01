@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sookmyung.moaroom.Dto.requestUserDto;
+import sookmyung.moaroom.Model.Url;
 import sookmyung.moaroom.Model.Users;
 import sookmyung.moaroom.Service.UserService;
 
@@ -38,5 +39,10 @@ public class UserController {
     @DeleteMapping("user/{user_id}")
     public String deleteUser(@PathVariable("user_id") String id){
         return userService.delete(id);
+    }
+
+    @GetMapping("/url/{user_id}")
+    public Url getUrl(@PathVariable("user_id") String id){
+        return userService.getUrl(id);
     }
 }
