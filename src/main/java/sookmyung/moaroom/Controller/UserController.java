@@ -3,12 +3,14 @@ package sookmyung.moaroom.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import sookmyung.moaroom.Dto.requestLoginDto;
 import sookmyung.moaroom.Dto.requestUserDto;
 import sookmyung.moaroom.Model.Url;
 import sookmyung.moaroom.Model.Users;
 import sookmyung.moaroom.Service.UserService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class UserController {
@@ -19,6 +21,11 @@ public class UserController {
     @PostMapping("/user/new")
     public String addUser(@Validated @RequestBody requestUserDto newUser){
         return userService.save(newUser);
+    }
+
+    @PostMapping("/login")
+    public UUID login(@Validated @RequestBody requestLoginDto loginUser){
+        return userService.login(loginUser);
     }
 
     @PutMapping("/user/{user_id}")
