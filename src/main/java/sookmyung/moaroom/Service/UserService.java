@@ -52,8 +52,12 @@ public class UserService {
                 headers.setContentType(MediaType.APPLICATION_JSON);
 
                 JSONObject reqBody = new JSONObject();
-                reqBody.put("professor_info", newUser);
-                HttpEntity<String> request = new HttpEntity<String>(reqBody.toString(), headers);
+                reqBody.put("id", newUser.getId());
+                reqBody.put("password", newUser.getPassword());
+                reqBody.put("name", newUser.getName());
+                reqBody.put("user_num", newUser.getUserNum());
+                reqBody.put("role", newUser.getRole());
+                HttpEntity<JSONObject> request = new HttpEntity<JSONObject>(reqBody, headers);
 
                 ResponseEntity<Url> response = restTemplate.postForEntity(
                         "https://localhost:8003/professor/",
