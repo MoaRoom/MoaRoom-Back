@@ -13,6 +13,7 @@ import sookmyung.moaroom.Respository.UrlRepository;
 import sookmyung.moaroom.Respository.UserRepository;
 
 import java.util.List;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Service
@@ -51,16 +52,17 @@ public class UserService {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
 
-                JSONObject reqBody = new JSONObject();
+                HashMap<String, Object> reqBody = new HashMap<>();
+                reqBody.put("user_id", newUser.getUserId().toString());
                 reqBody.put("id", newUser.getId());
                 reqBody.put("password", newUser.getPassword());
                 reqBody.put("name", newUser.getName());
                 reqBody.put("user_num", newUser.getUserNum());
                 reqBody.put("role", newUser.getRole());
-                HttpEntity<JSONObject> request = new HttpEntity<JSONObject>(reqBody, headers);
-
+                HttpEntity<?> request = new HttpEntity<>(reqBody, headers);
+                // TODO: response var들을 카멜에서 스네이크로 변환하는 작업 필요(현재는 Infra에서 처리)
                 ResponseEntity<Url> response = restTemplate.postForEntity(
-                        "https://localhost:8003/professor/",
+                        "http://59.15.113.146:8003/professor/",
                         request,
                         Url.class
                 );

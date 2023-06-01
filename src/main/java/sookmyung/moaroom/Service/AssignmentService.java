@@ -16,6 +16,7 @@ import sookmyung.moaroom.Respository.UrlRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Service
@@ -63,14 +64,15 @@ public class AssignmentService {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        JSONObject reqBody = new JSONObject();
+
+        HashMap<String, Object> reqBody = new HashMap<>();
         reqBody.put("assignment_id", newAssignment.getAssignmentId());
         reqBody.put("lecture_id", newAssignment.getLectureId());
         reqBody.put("title", newAssignment.getTitle());
         reqBody.put("start_date", newAssignment.getStartDate());
         reqBody.put("due_date", newAssignment.getDueDate());
         reqBody.put("description", newAssignment.getDescription());
-        HttpEntity<JSONObject> request = new HttpEntity<JSONObject>(reqBody, headers);
+        HttpEntity<?> request = new HttpEntity<>(reqBody, headers);
         ResponseEntity<Boolean> response = restTemplate.postForEntity(
                 user_url+"assignments/",
                 request,

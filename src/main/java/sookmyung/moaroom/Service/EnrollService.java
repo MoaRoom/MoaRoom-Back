@@ -14,6 +14,7 @@ import sookmyung.moaroom.Respository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Service
@@ -62,16 +63,26 @@ public class EnrollService {
             }
             userRepository.save(existUser);
 
-              // infra측에 req: users model, res: url model
-                    RestTemplate restTemplate = new RestTemplate();
-            JSONObject reqBody = new JSONObject();
-            reqBody.put("student_info", existUser);
+            // infra측에 req: users model, res: url model
+            RestTemplate restTemplate = new RestTemplate();
+            
+            HashMap<String, Object> student_info = new HashMap<>();
+            student_info.put("user_id", existUser.getUserId().toString());
+            student_info.put("id", existUser.getId());
+            student_info.put("password", existUser.getPassword());
+            student_info.put("name", existUser.getName());
+            student_info.put("user_num", existUser.getUserNum());
+            student_info.put("role", existUser.getRole());
+
+            HashMap<String, Object> reqBody = new HashMap<>();
+            reqBody.put("student_info", student_info);
             reqBody.put("lecture_id",data.getLectureId());
             ResponseEntity<Url> response = restTemplate.postForEntity(
-                    "https://localhost:8003/student/",
+                    "http://59.15.113.146:8003/student/",
                     reqBody,
                     Url.class
             );
+            System.out.println(response);
 
             // url 테이블에 저장
             Url newUrl = response.getBody();
