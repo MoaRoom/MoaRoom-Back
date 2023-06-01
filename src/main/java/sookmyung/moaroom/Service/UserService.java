@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import sookmyung.moaroom.Dto.requestLoginDto;
 import sookmyung.moaroom.Dto.requestUserDto;
 import sookmyung.moaroom.Model.Role;
 import sookmyung.moaroom.Model.Url;
@@ -144,5 +145,14 @@ public class UserService {
                return urlRepository.findById(UUID.fromString(id)).get();
         }
         return null;
+    }
+
+    public UUID login(requestLoginDto data){
+        Users existUser = userRepository.findByIdAndPassword(data.getId(), data.getPassword());
+        if(existUser == null){
+            return null;
+        } else {
+            return existUser.getUserId();
+        }
     }
 }
