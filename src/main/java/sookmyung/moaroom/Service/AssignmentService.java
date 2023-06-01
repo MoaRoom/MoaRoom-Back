@@ -56,6 +56,9 @@ public class AssignmentService {
 
         assignmentRepository.save(newAssignment);
 
+        Url professorUrl = urlRepository.findById(data.getUser_id()).get();
+        String user_url = professorUrl.getContainerAddress();
+
         // infra측에 req: users model, res: url model
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -64,7 +67,7 @@ public class AssignmentService {
         reqBody.put("assignment_info", newAssignment);
         HttpEntity<String> request = new HttpEntity<String>(reqBody.toString(), headers);
         ResponseEntity<Boolean> response = restTemplate.postForEntity(
-                "https://localhost:8003/assignment/",
+                user_url+"assignments/",
                 request,
                 Boolean.class
         );
