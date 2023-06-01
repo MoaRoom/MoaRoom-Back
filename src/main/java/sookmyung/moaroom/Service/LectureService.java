@@ -3,9 +3,14 @@ package sookmyung.moaroom.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sookmyung.moaroom.Dto.requestLectureDto;
+import sookmyung.moaroom.Dto.responseLectureDto;
 import sookmyung.moaroom.Model.Lecture;
+import sookmyung.moaroom.Model.Role;
+import sookmyung.moaroom.Model.Users;
 import sookmyung.moaroom.Respository.LectureRepository;
+import sookmyung.moaroom.Respository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +18,8 @@ import java.util.UUID;
 public class LectureService {
     @Autowired
     LectureRepository lectureRepository;
+    @Autowired
+    UserRepository userRepository;
     @Autowired
     EnrollService enrollService;
 
@@ -64,12 +71,49 @@ public class LectureService {
         return null;
     }
 
-    public List<Lecture> findAll(){
+    public List<responseLectureDto> findAll(String user_id){
+        List<responseLectureDto> lectureList = new ArrayList<>();
         try{
             if(lectureRepository.findAll().isEmpty()){
                 throw new Exception("강의 없음");
             }
-            return lectureRepository.findAll();
+            Users loginUser = userRepository.getById(UUID.fromString(user_id));
+            if(loginUser.getRole() == Role.PROFESSOR.getRole()){
+                List<String> classes = loginUser.getClasses();
+                for(int i=0; i<classes.size(); i++){
+                    String lecture_id = classes.get(i);
+                    responseLectureDto lectureDto = new responseLectureDto();
+                    Lecture lecture = lectureRepository.findById(UUID.fromString(lecture_id)).get();
+
+                    lectureDto.setTitle(lecture.getTitle());
+                    lectureDto.setRoom(lecture.getRoom());
+                    lectureDto.setEnroll(Boolean.TRUE);
+                    lectureDto.setProfessor_name(loginUser.getName());
+
+                    lectureList.add(lectureDto);
+                }
+            } else if (loginUser.getRole() == Role.STUDENT.getRole()) {
+                List<Lecture> lectures = lectureRepository.findAll();
+                for(int i=0; i<lectures.size(); i++){
+                    responseLectureDto lectureDto = new responseLectureDto();
+                    Lecture lecture = lectures.get(i);
+
+                    if(loginUser.getClasses().contains(lecture.getLectureId().toString())){
+                        lectureDto.setEnroll(Boolean.TRUE);
+                    } else{
+                        lectureDto.setEnroll(Boolean.FALSE);
+                    }
+
+                    lectureDto.setTitle(lecture.getTitle());
+                    lectureDto.setRoom(lecture.getRoom());
+
+                    Users professor = userRepository.findById(lecture.getProfessorId()).get();
+                    lectureDto.setProfessor_name(professor.getName());
+
+                    lectureList.add(lectureDto);
+                }
+            }
+            return lectureList;
 
         } catch (Exception e){
             System.out.println("err: "+e.getMessage());
