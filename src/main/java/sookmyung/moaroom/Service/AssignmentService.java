@@ -58,7 +58,7 @@ public class AssignmentService {
         assignmentRepository.save(newAssignment);
 
         Url professorUrl = urlRepository.findById(data.getUser_id()).get();
-        String user_url = professorUrl.getContainerAddress();
+        final String user_url = professorUrl.getApiEndpoint();
 
         // infra측에 req: users model, res: url model
         RestTemplate restTemplate = new RestTemplate();
@@ -66,15 +66,15 @@ public class AssignmentService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HashMap<String, Object> reqBody = new HashMap<>();
-        reqBody.put("assignment_id", newAssignment.getAssignmentId());
-        reqBody.put("lecture_id", newAssignment.getLectureId());
+        reqBody.put("assignment_id", newAssignment.getAssignmentId().toString());
+        reqBody.put("lecture_id", newAssignment.getLectureId().toString());
         reqBody.put("title", newAssignment.getTitle());
         reqBody.put("start_date", newAssignment.getStartDate());
         reqBody.put("due_date", newAssignment.getDueDate());
         reqBody.put("description", newAssignment.getDescription());
         HttpEntity<?> request = new HttpEntity<>(reqBody, headers);
         ResponseEntity<Boolean> response = restTemplate.postForEntity(
-                user_url+"assignments/",
+                user_url+"/assignments/",
                 request,
                 Boolean.class
         );
