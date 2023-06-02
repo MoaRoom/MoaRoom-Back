@@ -4,15 +4,11 @@ import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
-public class responseEnrollDto {
-    @NotNull
-    private UUID student_id;
+public class requestLoginDto {
     @NotNull
     private String id;
     @NotNull
-    private String name;
+    private String password;
 }
