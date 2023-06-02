@@ -34,17 +34,17 @@ public class AssignmentService {
         Assignment newAssignment = new Assignment();
         newAssignment.setAssignmentId(UUID.randomUUID());
         newAssignment.setTitle(data.getTitle().toString());
-        newAssignment.setLectureId(data.getLectureId());
-        if (data.getStartDate()==null) {
+        newAssignment.setLectureId(data.getLecture_id());
+        if (data.getStart_date()==null) {
             LocalDateTime now = LocalDateTime.now();
             newAssignment.setStartDate(now);
             step = 0;
         } else{
-            newAssignment.setStartDate(data.getStartDate());
+            newAssignment.setStartDate(data.getStart_date());
             step = 1;
         }
-        if (data.getDueDate()!=null) {
-            newAssignment.setDueDate(data.getDueDate());
+        if (data.getDue_date()!=null) {
+            newAssignment.setDueDate(data.getDue_date());
         } else{
             newAssignment.setDueDate(null);
         }
@@ -96,7 +96,7 @@ public class AssignmentService {
         try{
             AssignmentPK assignmentPK = new AssignmentPK();
             assignmentPK.setAssignmentId(UUID.fromString(assignment_id));
-            assignmentPK.setLectureId(data.getLectureId());
+            assignmentPK.setLectureId(data.getLecture_id());
             Assignment existAssignment = assignmentRepository.findById(assignmentPK).get();
             if (assignmentRepository.findById(assignmentPK).isEmpty()){
                 throw new Exception("존재하지 않는 과제");
@@ -104,11 +104,11 @@ public class AssignmentService {
 
             existAssignment.setTitle(data.getTitle());
 
-            if (data.getStartDate()!=null) {
-                existAssignment.setStartDate(data.getStartDate());
+            if (data.getStart_date()!=null) {
+                existAssignment.setStartDate(data.getStart_date());
             }
-            if (data.getDueDate()!=null) {
-                existAssignment.setDueDate(data.getDueDate());
+            if (data.getDue_date()!=null) {
+                existAssignment.setDueDate(data.getDue_date());
             }
             if (data.getDescription()!=null) {
                 existAssignment.setDescription(data.getDescription());

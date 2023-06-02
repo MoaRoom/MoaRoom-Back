@@ -9,12 +9,12 @@ import java.util.UUID;
 @Data
 public class requestAssignmentDto {
     @NotNull
-    private UUID lectureId;
+    private UUID lecture_id;
     @NotNull
     private UUID user_id;
     @NotNull
     private String title;
-    private LocalDateTime startDate;
-    private LocalDateTime dueDate;
+    private LocalDateTime start_date;
+    private LocalDateTime due_date;
     private String description;
 }
