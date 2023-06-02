@@ -10,7 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class responseEnrollDto {
     @NotNull
-    private UUID studentId;
+    private UUID student_id;
     @NotNull
     private String id;
     @NotNull

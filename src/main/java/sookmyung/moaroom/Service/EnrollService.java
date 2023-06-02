@@ -47,17 +47,17 @@ public class EnrollService {
     public String save(requestEnrollDto data){
         try {
 
-            Users existUser = userRepository.findById(data.getStudentId()).get();
+            Users existUser = userRepository.findById(data.getStudent_id()).get();
             if (existUser.equals(null)){
                 throw new Exception("존재하지 않는 사용자");
             }
             if(existUser.getClasses()==null){
                 ArrayList<String> newClass = new ArrayList<>();
-                newClass.add(data.getLectureId().toString());
+                newClass.add(data.getLecture_id().toString());
                 existUser.setClasses(newClass);
             } else{
                ArrayList<String> classList = existUser.getClasses();
-               classList.add(data.getLectureId().toString());
+               classList.add(data.getLecture_id().toString());
                existUser.setClasses(classList);
             }
             userRepository.save(existUser);
@@ -66,7 +66,7 @@ public class EnrollService {
                     RestTemplate restTemplate = new RestTemplate();
             JSONObject reqBody = new JSONObject();
             reqBody.put("student_info", existUser);
-            reqBody.put("lecture_id",data.getLectureId());
+            reqBody.put("lecture_id",data.getLecture_id());
             ResponseEntity<Url> response = restTemplate.postForEntity(
                     "https://localhost:8003/student/",
                     reqBody,

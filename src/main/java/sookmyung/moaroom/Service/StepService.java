@@ -68,9 +68,9 @@ public class StepService {
     }
 
     public void scoring(requestScoreDto data){
-        Users student = userRepository.findById(data.getUserId()).get();
-        if(student.getClasses()!=null&student.getClasses().contains(data.getLectureId().toString())){
-            StepPK stepPK = new StepPK(data.getAssignmentId(), data.getLectureId(), data.getUserId());
+        Users student = userRepository.findById(data.getUser_id()).get();
+        if(student.getClasses()!=null&student.getClasses().contains(data.getLecture_id().toString())){
+            StepPK stepPK = new StepPK(data.getAssignment_id(), data.getLecture_id(), data.getUser_id());
             Step existStep = stepRepository.findById(stepPK).get();
             existStep.setStep(Process.DONE.getRole());
             existStep.setScore(data.getScore());
