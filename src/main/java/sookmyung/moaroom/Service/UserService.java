@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sookmyung.moaroom.Dto.requestLoginDto;
 import sookmyung.moaroom.Dto.requestUserDto;
+import sookmyung.moaroom.Dto.responseUrlDto;
 import sookmyung.moaroom.Model.Role;
 import sookmyung.moaroom.Model.Url;
 import sookmyung.moaroom.Model.Users;
@@ -61,15 +62,19 @@ public class UserService {
                 reqBody.put("user_num", newUser.getUserNum());
                 reqBody.put("role", newUser.getRole());
                 HttpEntity<?> request = new HttpEntity<>(reqBody, headers);
-                // TODO: response var들을 카멜에서 스네이크로 변환하는 작업 필요(현재는 Infra에서 처리)
-                ResponseEntity<Url> response = restTemplate.postForEntity(
+                ResponseEntity<responseUrlDto> response = restTemplate.postForEntity(
                         "http://59.15.113.146:8003/professor/",
                         request,
-                        Url.class
+                        responseUrlDto.class
                 );
 
                 // url 테이블에 저장
-                Url newUrl = response.getBody();
+                responseUrlDto resdata=response.getBody();
+                Url newUrl = new Url();
+                newUrl.setId(resdata.getId());
+                newUrl.setLectureId(resdata.getLecture_id());
+                newUrl.setContainerAddress(resdata.getContainer_address());
+                newUrl.setApiEndpoint(resdata.getApi_endpoint());
                 urlRepository.save(newUrl);
             }
             return "새로운 사용자 등록 완료";

@@ -1,5 +1,9 @@
-package sookmyung.moaroom.Model;
+package sookmyung.moaroom.Dto;
 
+import com.sun.istack.NotNull;
+import lombok.Data;
+
+import java.util.UUID;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,24 +16,16 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
-@TypeDef(name="list_str", typeClass = ArrayList.class)
-@Entity
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Url {
-    @Id
+public class responseUrlDto {
     @NotNull
-    @Column(name = "id")
     private UUID id;
-    @Column(name = "lecture_id")
-    private UUID lectureId;
-
     @NotNull
-    @Column(name = "container_address")
-    private String containerAddress;
+    private UUID lecture_id;
+    private String container_address;
+    private String api_endpoint;
 
-    @Column(name = "api_endpoint")
-    private String apiEndpoint;
 }

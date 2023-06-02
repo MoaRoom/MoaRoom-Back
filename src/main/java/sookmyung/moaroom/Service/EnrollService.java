@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sookmyung.moaroom.Dto.requestEnrollDto;
+import sookmyung.moaroom.Dto.responseUrlDto;
 import sookmyung.moaroom.Model.Role;
 import sookmyung.moaroom.Model.Url;
 import sookmyung.moaroom.Model.Users;
@@ -76,16 +77,21 @@ public class EnrollService {
 
             HashMap<String, Object> reqBody = new HashMap<>();
             reqBody.put("student_info", student_info);
-            reqBody.put("lecture_id",data.getLectureId());
-            ResponseEntity<Url> response = restTemplate.postForEntity(
+            reqBody.put("lecture_id",data.getLecture_id());
+            ResponseEntity<responseUrlDto> response = restTemplate.postForEntity(
                     "http://59.15.113.146:8003/student/",
                     reqBody,
-                    Url.class
+                    responseUrlDto.class
             );
             System.out.println(response);
 
             // url 테이블에 저장
-            Url newUrl = response.getBody();
+            responseUrlDto resdata=response.getBody();
+            Url newUrl = new Url();
+            newUrl.setId(resdata.getId());
+            newUrl.setLectureId(resdata.getLecture_id());
+            newUrl.setContainerAddress(resdata.getContainer_address());
+            newUrl.setApiEndpoint(resdata.getApi_endpoint());
             urlRepository.save(newUrl);
 
             return "강의 신청 완료";
