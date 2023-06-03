@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class responseLectureDto {
     @NotNull
+    private String lecture_id;
+    @NotNull
     private String title;
     @NotNull
     private Integer room;

@@ -86,6 +86,7 @@ public class LectureService {
                     responseLectureDto lectureDto = new responseLectureDto();
                     Lecture lecture = lectureRepository.findById(UUID.fromString(lecture_id)).get();
 
+                    lectureDto.setLecture_id(lecture.getLectureId().toString());
                     lectureDto.setTitle(lecture.getTitle());
                     lectureDto.setRoom(lecture.getRoom());
                     lectureDto.setProfessor_name(loginUser.getName());
@@ -104,6 +105,7 @@ public class LectureService {
                         lectureDto.setEnroll(Boolean.FALSE);
                     }
 
+                    lectureDto.setLecture_id(lecture.getLectureId().toString());
                     lectureDto.setTitle(lecture.getTitle());
                     lectureDto.setRoom(lecture.getRoom());
 
