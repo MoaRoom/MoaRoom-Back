@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sookmyung.moaroom.Dto.requestLoginDto;
 import sookmyung.moaroom.Dto.requestUserDto;
+import sookmyung.moaroom.Dto.responseUrlDto;
 import sookmyung.moaroom.Model.Role;
 import sookmyung.moaroom.Model.Url;
 import sookmyung.moaroom.Model.Users;
@@ -14,6 +15,7 @@ import sookmyung.moaroom.Respository.UrlRepository;
 import sookmyung.moaroom.Respository.UserRepository;
 
 import java.util.List;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Service
@@ -52,22 +54,27 @@ public class UserService {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
 
-                JSONObject reqBody = new JSONObject();
+                HashMap<String, Object> reqBody = new HashMap<>();
+                reqBody.put("user_id", newUser.getUserId().toString());
                 reqBody.put("id", newUser.getId());
                 reqBody.put("password", newUser.getPassword());
                 reqBody.put("name", newUser.getName());
                 reqBody.put("user_num", newUser.getUserNum());
                 reqBody.put("role", newUser.getRole());
-                HttpEntity<JSONObject> request = new HttpEntity<JSONObject>(reqBody, headers);
-
-                ResponseEntity<Url> response = restTemplate.postForEntity(
-                        "https://localhost:8003/professor/",
+                HttpEntity<?> request = new HttpEntity<>(reqBody, headers);
+                ResponseEntity<responseUrlDto> response = restTemplate.postForEntity(
+                        "http://59.15.113.146:8003/professor/",
                         request,
-                        Url.class
+                        responseUrlDto.class
                 );
 
                 // url 테이블에 저장
-                Url newUrl = response.getBody();
+                responseUrlDto resdata=response.getBody();
+                Url newUrl = new Url();
+                newUrl.setId(resdata.getId());
+                newUrl.setLectureId(resdata.getLecture_id());
+                newUrl.setContainerAddress(resdata.getContainer_address());
+                newUrl.setApiEndpoint(resdata.getApi_endpoint());
                 urlRepository.save(newUrl);
             }
             return "새로운 사용자 등록 완료";

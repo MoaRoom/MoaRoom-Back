@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sookmyung.moaroom.Dto.requestEnrollDto;
+import sookmyung.moaroom.Dto.responseUrlDto;
 import sookmyung.moaroom.Model.Role;
 import sookmyung.moaroom.Model.Url;
 import sookmyung.moaroom.Model.Users;
@@ -14,6 +15,7 @@ import sookmyung.moaroom.Respository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Service
@@ -62,19 +64,34 @@ public class EnrollService {
             }
             userRepository.save(existUser);
 
-              // infra측에 req: users model, res: url model
-                    RestTemplate restTemplate = new RestTemplate();
-            JSONObject reqBody = new JSONObject();
-            reqBody.put("student_info", existUser);
+            // infra측에 req: users model, res: url model
+            RestTemplate restTemplate = new RestTemplate();
+            
+            HashMap<String, Object> student_info = new HashMap<>();
+            student_info.put("user_id", existUser.getUserId().toString());
+            student_info.put("id", existUser.getId());
+            student_info.put("password", existUser.getPassword());
+            student_info.put("name", existUser.getName());
+            student_info.put("user_num", existUser.getUserNum());
+            student_info.put("role", existUser.getRole());
+
+            HashMap<String, Object> reqBody = new HashMap<>();
+            reqBody.put("student_info", student_info);
             reqBody.put("lecture_id",data.getLecture_id());
-            ResponseEntity<Url> response = restTemplate.postForEntity(
-                    "https://localhost:8003/student/",
+            ResponseEntity<responseUrlDto> response = restTemplate.postForEntity(
+                    "http://59.15.113.146:8003/student/",
                     reqBody,
-                    Url.class
+                    responseUrlDto.class
             );
+            System.out.println(response);
 
             // url 테이블에 저장
-            Url newUrl = response.getBody();
+            responseUrlDto resdata=response.getBody();
+            Url newUrl = new Url();
+            newUrl.setId(resdata.getId());
+            newUrl.setLectureId(resdata.getLecture_id());
+            newUrl.setContainerAddress(resdata.getContainer_address());
+            newUrl.setApiEndpoint(resdata.getApi_endpoint());
             urlRepository.save(newUrl);
 
             return "강의 신청 완료";
