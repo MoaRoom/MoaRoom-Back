@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sookmyung.moaroom.Dto.requestScoreDto;
+import sookmyung.moaroom.Dto.responseStepDto;
 import sookmyung.moaroom.Model.*;
 import sookmyung.moaroom.Model.Process;
 import sookmyung.moaroom.Respository.StepRepository;
 import sookmyung.moaroom.Respository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -114,6 +116,25 @@ public class StepService {
                 stepRepository.save(existStep);
             }
         }
+    }
+
+    public List<responseStepDto> findStepList(String assignment_id){
+        List<Step> stepList = stepRepository.findByAssignmentId(UUID.fromString(assignment_id));
+        List<responseStepDto> stepDtoList = new ArrayList<>();
+        for (int i=0; i<stepList.size(); i++){
+            Step tempStep = stepList.get(i);
+            Users tempUser = userRepository.findById(tempStep.getUserId()).get();
+            if(tempUser != null && tempUser.getRole() == Role.STUDENT.getRole()){
+                responseStepDto step = new responseStepDto();
+                step.setStep(tempStep.getStep());
+                step.setId(tempUser.getUserId());
+                step.setScore(tempStep.getScore());
+                step.setName(tempUser.getName());
+
+                stepDtoList.add(step);
+            }
+        }
+        return stepDtoList;
     }
 
     public List<Step> allStep(){
