@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import sookmyung.moaroom.Dto.requestEnrollDto;
 import sookmyung.moaroom.Dto.requestLectureDto;
 import sookmyung.moaroom.Dto.responseLectureDto;
+import sookmyung.moaroom.Dto.responseLectureInfoDto;
 import sookmyung.moaroom.Model.Lecture;
 import sookmyung.moaroom.Model.Users;
 import sookmyung.moaroom.Service.EnrollService;
@@ -54,5 +55,10 @@ public class LectureController {
     @GetMapping("/lecture/list/{lecture_id}")
     public List<Users> studentList(@PathVariable("lecture_id") String id){
         return enrollService.findStudentList(id);
+    }
+
+    @GetMapping("/lecture/info/{assignment_id}")
+    public responseLectureInfoDto lectureInfo(@PathVariable("assignment_id") String id){
+        return lectureService.findLectureInfo(id);
     }
 }

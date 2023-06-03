@@ -4,21 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sookmyung.moaroom.Dto.requestLectureDto;
 import sookmyung.moaroom.Dto.responseLectureDto;
+import sookmyung.moaroom.Dto.responseLectureInfoDto;
+import sookmyung.moaroom.Model.Assignment;
 import sookmyung.moaroom.Model.Lecture;
 import sookmyung.moaroom.Model.Role;
 import sookmyung.moaroom.Model.Users;
+import sookmyung.moaroom.Respository.AssignmentRepository;
 import sookmyung.moaroom.Respository.LectureRepository;
 import sookmyung.moaroom.Respository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class LectureService {
     @Autowired
     LectureRepository lectureRepository;
+    @Autowired
+    AssignmentRepository assignmentRepository;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -150,5 +152,19 @@ public class LectureService {
         } catch (Exception e){
             return "err: "+e.getMessage();
         }
+    }
+
+    public responseLectureInfoDto findLectureInfo(String assignment_id){
+        Assignment assignment = assignmentRepository.findByAssignmentId(UUID.fromString(assignment_id));
+        Lecture lecture = lectureRepository.findById(assignment.getLectureId()).get();
+        Users professor = userRepository.findById(lecture.getProfessorId()).get();
+        if(lecture != null && professor != null){
+            responseLectureInfoDto lectureInfo = new responseLectureInfoDto();
+            lectureInfo.setProfessor(professor.getName());
+            lectureInfo.setRoom(lecture.getRoom());
+            lectureInfo.setTitle(lecture.getTitle());
+            return lectureInfo;
+        }
+        return null;
     }
 }
