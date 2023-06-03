@@ -160,7 +160,9 @@ public class LectureService {
         Users professor = userRepository.findById(lecture.getProfessorId()).get();
         if(lecture != null && professor != null){
             responseLectureInfoDto lectureInfo = new responseLectureInfoDto();
-            lectureInfo.setProfessor(professor.getName());
+            lectureInfo.setLecture_id(lecture.getLectureId());
+            lectureInfo.setProfessor_id(professor.getUserId());
+            lectureInfo.setProfessor_name(professor.getName());
             lectureInfo.setRoom(lecture.getRoom());
             lectureInfo.setTitle(lecture.getTitle());
             return lectureInfo;
