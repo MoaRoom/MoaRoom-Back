@@ -14,6 +14,5 @@ public class responseLectureDto {
     @NotNull
     private String professor_name;
 
-    @NotNull
     private Boolean enroll;
 }

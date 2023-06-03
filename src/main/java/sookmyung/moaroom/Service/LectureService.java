@@ -88,7 +88,6 @@ public class LectureService {
 
                     lectureDto.setTitle(lecture.getTitle());
                     lectureDto.setRoom(lecture.getRoom());
-                    lectureDto.setEnroll(Boolean.TRUE);
                     lectureDto.setProfessor_name(loginUser.getName());
 
                     lectureList.add(lectureDto);
