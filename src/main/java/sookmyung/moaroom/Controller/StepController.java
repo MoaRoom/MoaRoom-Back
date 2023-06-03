@@ -14,17 +14,17 @@ public class StepController {
     @Autowired
     StepService stepService;
 
-    @PostMapping("assignment/score")
+    @PostMapping("/assignment/score")
     public void scoring(@RequestBody requestScoreDto score){
         stepService.scoring(score);
     }
 
-    @GetMapping("step/{assignment_id}")
+    @GetMapping("/step/{assignment_id}")
     public List<responseStepDto> findStepList(@PathVariable(name = "assignment_id") String id){
         return stepService.findStepList(id);
     }
 
-    @GetMapping("step/all")
+    @GetMapping("/step/all")
     public List<Step> allStep() {
         return stepService.allStep();
     }
