@@ -37,9 +37,9 @@ public class AssignmentController {
         return assignmentService.findOne(id);
     }
 
-    @DeleteMapping("/assignment/{assignment_id}")
-    public String deleteAssignment(@PathVariable("assignment_id") String id){
-        return assignmentService.delete(id);
+    @DeleteMapping("/assignment/{assignment_title}")
+    public String deleteAssignment(@PathVariable("assignment_title") String title){
+        return assignmentService.delete(title);
     }
 
     @GetMapping("/assignment/list/{assignment_id}")

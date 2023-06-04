@@ -169,13 +169,9 @@ public class AssignmentService {
         return null;
     }
 
-    public String delete(String id){
+    public String delete(String title){
         try {
-            if(assignmentRepository.findByAssignmentId(UUID.fromString(id)).equals(null)){
-                throw new Exception("존재하지 않는 강의");
-            }
-
-            assignmentRepository.deleteByAssignmentId(UUID.fromString(id));
+            assignmentRepository.deleteByTitle(title);
             return "삭제 성공";
         } catch (Exception e){
             return "err: "+e.getMessage();
