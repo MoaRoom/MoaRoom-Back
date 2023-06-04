@@ -9,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sookmyung.moaroom.Dto.requestAssignmentDto;
+import sookmyung.moaroom.Dto.responseAssignmentDto;
 import sookmyung.moaroom.Model.*;
 import sookmyung.moaroom.Respository.AssignmentRepository;
+import sookmyung.moaroom.Respository.StepRepository;
 import sookmyung.moaroom.Respository.UrlRepository;
 
 import java.time.LocalDateTime;
@@ -23,6 +25,8 @@ import java.util.UUID;
 public class AssignmentService {
     @Autowired
     AssignmentRepository assignmentRepository;
+    @Autowired
+    StepRepository stepRepository;
     @Autowired
     UrlRepository urlRepository;
     @Autowired
@@ -124,13 +128,28 @@ public class AssignmentService {
         return null;
     }
 
-    public List<Assignment> findAll(){
+    public List<responseAssignmentDto> findAll(String user_id){
         try{
             if(assignmentRepository.findAll().isEmpty()){
                 throw new Exception("과제 없음");
             }
-            return assignmentRepository.findAll();
 
+            List<Step> stepList = stepRepository.findByUserId(UUID.fromString(user_id));
+            if(stepList != null){
+                List<responseAssignmentDto> responseAssignmentDtoList = new ArrayList<>();
+                for(int i=0; i<stepList.size(); i++){
+                    Step step = stepList.get(i);
+                    responseAssignmentDto assignmentDto = new responseAssignmentDto();
+                    Assignment assignment = assignmentRepository.findByAssignmentId(step.getAssignmentId());
+                    assignmentDto.setAssignment_id(step.getAssignmentId());
+                    assignmentDto.setStep(step.getStep());
+                    assignmentDto.setTitle(assignment.getTitle());
+                    assignmentDto.setScore(step.getScore());
+
+                    responseAssignmentDtoList.add(assignmentDto);
+                }
+                return responseAssignmentDtoList;
+            }
         } catch (Exception e){
             System.out.println("err: "+e.getMessage());
         }
