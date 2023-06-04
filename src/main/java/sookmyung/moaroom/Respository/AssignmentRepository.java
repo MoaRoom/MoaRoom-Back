@@ -12,5 +12,5 @@ import java.util.UUID;
 public interface AssignmentRepository extends JpaRepository<Assignment, AssignmentPK> {
     public Assignment findByAssignmentId(UUID assignmentId);
     @Transactional
-    public void deleteByAssignmentId(UUID assignmentId);
+    public void deleteByTitle(String title);
 }
