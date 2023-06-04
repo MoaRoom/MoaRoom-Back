@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sookmyung.moaroom.Dto.requestAssignmentDto;
+import sookmyung.moaroom.Dto.responseAssignmentDto;
 import sookmyung.moaroom.Model.Assignment;
 import sookmyung.moaroom.Model.Url;
 import sookmyung.moaroom.Service.AssignmentService;
@@ -26,9 +27,9 @@ public class AssignmentController {
         return assignmentService.modify(id, existAssignment);
     }
 
-    @GetMapping("/assignment/all")
-    public List<Assignment> allLecture(){
-        return assignmentService.findAll();
+    @GetMapping("/assignment/all/{user_id}")
+    public List<responseAssignmentDto> allLecture(@PathVariable("user_id") String id){
+        return assignmentService.findAll(id);
     }
 
     @GetMapping("/assignment/{assignment_id}")
