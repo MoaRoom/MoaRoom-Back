@@ -138,16 +138,9 @@ public class LectureService {
         return null;
     }
 
-    public String delete(String id, String professor_id){
+    public String delete(String title, Integer room){
         try {
-            if(lectureRepository.findById(UUID.fromString(id)).isEmpty()){
-                throw new Exception("존재하지 않는 강의");
-            }
-            if (!lectureRepository.findById(UUID.fromString(id)).get().getProfessorId().toString().equals(professor_id)){
-                throw new Exception("삭제 권한이 없는 사용자");
-            }
-
-            lectureRepository.deleteById(UUID.fromString(id));
+            lectureRepository.deleteByTitleAndRoom(title, room);
             return "삭제 성공";
         } catch (Exception e){
             return "err: "+e.getMessage();

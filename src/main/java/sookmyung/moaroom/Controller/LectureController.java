@@ -42,9 +42,9 @@ public class LectureController {
         return lectureService.findOne(id);
     }
 
-    @DeleteMapping("/lecture/{lecture_id}")
-    public String deleteLecture(@PathVariable("lecture_id") String id, @RequestParam("professor_id") String professor_id){
-        return lectureService.delete(id, professor_id);
+    @DeleteMapping("/lecture/{lecture_title}/{lecture_room}")
+    public String deleteLecture(@PathVariable("lecture_title") String title, @PathVariable("lecture_room") Integer room){
+        return lectureService.delete(title, room);
     }
 
     @PostMapping("/lecture/enroll")
