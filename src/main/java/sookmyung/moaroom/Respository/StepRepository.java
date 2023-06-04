@@ -12,5 +12,7 @@ import java.util.UUID;
 @Repository
 public interface StepRepository extends JpaRepository<Step, StepPK> {
 
+    public List<Step> findByAssignmentId(UUID assignmentId);
+
     public List<Step> findByUserId(UUID userId);
 }
