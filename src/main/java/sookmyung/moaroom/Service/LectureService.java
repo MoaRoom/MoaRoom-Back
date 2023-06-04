@@ -100,8 +100,9 @@ public class LectureService {
                 for(int i=0; i<lectures.size(); i++){
                     responseLectureDto lectureDto = new responseLectureDto();
                     Lecture lecture = lectures.get(i);
-
-                    if(loginUser.getClasses().contains(lecture.getLectureId().toString())){
+                    if(loginUser.getClasses() == null){
+                        lectureDto.setEnroll(Boolean.FALSE);
+                    } else if (loginUser.getClasses().contains(lecture.getLectureId().toString())) {
                         lectureDto.setEnroll(Boolean.TRUE);
                     } else{
                         lectureDto.setEnroll(Boolean.FALSE);
@@ -113,13 +114,14 @@ public class LectureService {
 
                     Users professor = userRepository.findById(lecture.getProfessorId()).get();
                     lectureDto.setProfessor_name(professor.getName());
-
+                    System.out.println(lectureDto);
                     lectureList.add(lectureDto);
                 }
             }
             return lectureList;
 
         } catch (Exception e){
+            e.printStackTrace();
             System.out.println("err: "+e.getMessage());
         }
         return null;
