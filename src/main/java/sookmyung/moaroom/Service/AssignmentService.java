@@ -141,6 +141,7 @@ public class AssignmentService {
                     Step step = stepList.get(i);
                     responseAssignmentDto assignmentDto = new responseAssignmentDto();
                     Assignment assignment = assignmentRepository.findByAssignmentId(step.getAssignmentId());
+                    assignmentDto.setLecture_id(step.getLectureId());
                     assignmentDto.setAssignment_id(step.getAssignmentId());
                     assignmentDto.setStep(step.getStep());
                     assignmentDto.setTitle(assignment.getTitle());
