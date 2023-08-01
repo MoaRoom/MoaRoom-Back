@@ -2,7 +2,6 @@ package sookmyung.moaroom.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import sookmyung.moaroom.Dto.requestScoreDto;
 import sookmyung.moaroom.Dto.responseStepDto;
 import sookmyung.moaroom.Model.*;
@@ -79,43 +78,6 @@ public class StepService {
             stepRepository.save(existStep);
         }
 
-    }
-
-    @Transactional
-    public void setStartDate(UUID lectureId, UUID assignmentId){
-        List<Users> userList = userRepository.findAll();
-        for (int i = 0; i<userList.size(); i++){
-            Users user = userList.get(i);
-            if(user.getClasses()!=null && user.getClasses().contains(lectureId.toString())){
-                StepPK stepPK = new StepPK(assignmentId, lectureId, user.getUserId());
-                if(!stepRepository.findById(stepPK).isEmpty()){
-                    Step existStep = stepRepository.getReferenceById(stepPK);
-                    existStep.setStep(Process.PROCEEDING.getRole());
-                    stepRepository.save(existStep);
-                } else {
-                    Step newStep = new Step();
-                    newStep.setStep(Process.PROCEEDING.getRole());
-                    newStep.setAssignmentId(assignmentId);
-                    newStep.setUserId(user.getUserId());
-                    newStep.setLectureId(lectureId);
-
-                    stepRepository.save(newStep);
-                }
-            }
-        }
-    }
-    @Transactional
-    public void setDueDate(UUID lectureId, UUID assignmentId){
-        List<Users> userList = userRepository.findAll();
-        for (int i = 0; i<userList.size(); i++){
-            Users user = userList.get(i);
-            if(user.getClasses()!=null && user.getClasses().contains(lectureId.toString())){
-                StepPK stepPK = new StepPK(assignmentId, lectureId, user.getUserId());
-                Step existStep = stepRepository.findById(stepPK).get();
-                existStep.setStep(Process.GRADING.getRole());
-                stepRepository.save(existStep);
-            }
-        }
     }
 
     public List<responseStepDto> findStepList(String assignment_id){
