@@ -1,6 +1,5 @@
 package sookmyung.moaroom.Service;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -40,8 +39,8 @@ public class UserService {
                 newUser.setRole(2);
             }
 
-            if (data.getUser_num() != null) {
-                newUser.setUserNum(data.getUser_num());
+            if (data.getUserNum() != null) {
+                newUser.setUserNum(data.getUserNum());
             } else{
                 newUser.setUserNum(null);
             }
@@ -99,8 +98,8 @@ public class UserService {
                 existUser.setRole(2);
             }
 
-            if(data.getUser_num() != null){
-                existUser.setUserNum(data.getUser_num());
+            if(data.getUserNum() != null){
+                existUser.setUserNum(data.getUserNum());
             }
             return userRepository.save(existUser);
         } catch (Exception e){

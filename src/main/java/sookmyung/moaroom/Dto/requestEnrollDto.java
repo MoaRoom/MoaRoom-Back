@@ -8,7 +8,7 @@ import java.util.UUID;
 @Data
 public class requestEnrollDto {
     @NotNull
-    private UUID lecture_id;
+    private UUID lectureId;
     @NotNull
-    private UUID student_id;
+    private UUID studentId;
 }

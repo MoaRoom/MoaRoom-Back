@@ -1,6 +1,5 @@
 package sookmyung.moaroom.Service;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -49,17 +48,17 @@ public class EnrollService {
     public String save(requestEnrollDto data){
         try {
 
-            Users existUser = userRepository.findById(data.getStudent_id()).get();
+            Users existUser = userRepository.findById(data.getStudentId()).get();
             if (existUser.equals(null)){
                 throw new Exception("존재하지 않는 사용자");
             }
             if(existUser.getClasses()==null){
                 ArrayList<String> newClass = new ArrayList<>();
-                newClass.add(data.getLecture_id().toString());
+                newClass.add(data.getLectureId().toString());
                 existUser.setClasses(newClass);
             } else{
                ArrayList<String> classList = existUser.getClasses();
-               classList.add(data.getLecture_id().toString());
+               classList.add(data.getLectureId().toString());
                existUser.setClasses(classList);
             }
             userRepository.save(existUser);
@@ -77,7 +76,7 @@ public class EnrollService {
 
             HashMap<String, Object> reqBody = new HashMap<>();
             reqBody.put("student_info", student_info);
-            reqBody.put("lecture_id",data.getLecture_id());
+            reqBody.put("lecture_id",data.getLectureId());
             ResponseEntity<responseUrlDto> response = restTemplate.postForEntity(
                     "http://59.15.113.146:8003/student/",
                     reqBody,

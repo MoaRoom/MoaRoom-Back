@@ -9,9 +9,9 @@ public class requestLectureDto {
     @NotNull
     private String title;
     @NotNull
-    private UUID professor_id;
+    private UUID professorId;
     @NotNull
     private Integer room;
-    private Integer room_count;
+    private Integer roomCount;
 
 }

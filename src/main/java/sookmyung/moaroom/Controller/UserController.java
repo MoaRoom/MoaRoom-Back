@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/user/new")
+    @PostMapping("/user")
     public String addUser(@Validated @RequestBody requestUserDto newUser){
         return userService.save(newUser);
     }
@@ -28,27 +28,27 @@ public class UserController {
         return userService.login(loginUser);
     }
 
-    @PutMapping("/user/{user_id}")
+    @PutMapping("/users/{user_id}")
     public Users updateUser(@PathVariable(name = "user_id")String id, @Validated @RequestBody requestUserDto existUser){
         return userService.modify(id, existUser);
     }
 
-    @GetMapping("/user/all")
+    @GetMapping("/users")
     public List<Users> allUser(){
         return userService.findAll();
     }
 
-    @GetMapping("/user/{user_id}")
+    @GetMapping("/users/{user_id}")
     public Users oneUser(@PathVariable("user_id") String id){
         return userService.findOne(id);
     }
 
-    @DeleteMapping("/user/{user_id}")
+    @DeleteMapping("/users/{user_id}")
     public String deleteUser(@PathVariable("user_id") String id){
         return userService.delete(id);
     }
 
-    @GetMapping("/url/{user_id}")
+    @GetMapping("/urls/{user_id}")
     public Url getUrl(@PathVariable("user_id") String id){
         return userService.getUrl(id);
     }

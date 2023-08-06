@@ -1,6 +1,5 @@
 package sookmyung.moaroom.Service;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -61,7 +60,7 @@ public class AssignmentService {
 
         assignmentRepository.save(newAssignment);
 
-        Url professorUrl = urlRepository.findById(data.getUser_id()).get();
+        Url professorUrl = urlRepository.findById(data.getProfessor_id()).get();
         final String user_url = professorUrl.getApiEndpoint();
 
         // infra측에 req: users model, res: url model
