@@ -3,7 +3,7 @@
 PROJECT_ROOT="/home/ubuntu/server/MoaRoom-Back" #코드가 주입되는 경로
 JAR_FILE="$PROJECT_ROOT/moaroom-backend.jar" #build.gradle에서 설정한 파일명으로 변경
 
-DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
+DEPLOY_LOG="$PROJECT_ROOT/logs/deploy.log"
 
 TIME_NOW=$(date +%c)
 
