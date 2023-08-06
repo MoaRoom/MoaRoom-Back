@@ -18,6 +18,20 @@ public class requestEnrollDto {
     @NotNull
     private UUID studentId;
 }
+
+public class responseLectureInfoDto {
+    @NotNull
+    private UUID professor_id;
+    @NotNull
+    private UUID lecture_id;
+    @NotNull
+    private String title;
+    @NotNull
+    private String professor_name;
+    @NotNull
+    private Integer room;
+}
+
 ```
 
 ## Model
@@ -73,48 +87,55 @@ public class Lecture {
 
 ## ✅ API
 
-### endpoint: http://localhost:5000
+### endpoint: http://moaroom-back.duckdns.org:8080
 
-### 1. [ Post ] `/lecture/new`
+### 1. [ Post ] `/lecture`
 
 - 새로운 강의 생성
 - req.body: `requestLectureDto`
 - return type: `String` "새로운 강의 등록 완료"
 
-### 2. [ Put ] `/lecture/{lecture_id}`
+### 2. [ Put ] `/lectures/{lecture_id}`
 
 - 강의 정보 수정
 - path variable: lecture_id
 - req.body: `requestLectureDto`
 - return type: `Lecture`
 
-### 3. [ Get ] `/user/all`
+### 3. [ Get ] `/lectures/{user_id}`
 
-- 모든 강의 정보
-- return type: `List<Lecture>`
+- 특정 유저의 강의 정보
+- path variable: user_id
+- return type: `List<responseLectureDto>`
 
-### 4. [ Get ] `/lecture/{lecture_id}`
+### 4. [ Get ] `/lectures/{lecture_id}`
 
 - 특정 강의 정보
 - path variable: lecture_id
 - return type: `Lecture`
 -
-### 5. [ Delete ] `/user/{lecture_id}`
+### 5. [ Delete ] `/lectures/title-class`
 
 - 특정 강의 삭제
-- path variable: lecture_id
-- req.param: professor_id
+- query string
+- req.param: lecture_title, lecture_class
 - return type: `String` "삭제 성공"
 
-### 6. [ Post ] `/lecture/enroll`
+### 6. [ Post ] `/lectures/students/enroll`
 
-- 강의 신청
+- 학생이 강의 신청
 - req.body: `requestEnrollDto`
 - return type: `String` "강의 신청 완료"
 
-### 7. [ Get ] `/lecture/list/{lecture_id}`
+### 7. [ Get ] `/lectures/{lecture_id}/students`
 
 - 특정 강의를 수강하는 학생 리스트
 - path variable: lecture_id
 - return type: `List<Users>`
+- 
+### 8. [ Get ] `/lectures/info/{assignment_id}`
+
+- 과제 id로 해당 강의의 정보
+- path variable: assignment_id
+- return type: `responseLectureInfoDto`
 

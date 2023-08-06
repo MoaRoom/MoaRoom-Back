@@ -22,42 +22,42 @@ public class LectureController {
     @Autowired
     EnrollService enrollService;
 
-    @PostMapping("/lecture/new")
+    @PostMapping("/lecture")
     public String addLecture(@Validated @RequestBody requestLectureDto newLecture){
         return lectureService.save(newLecture);
     }
 
-    @PutMapping("/lecture/{lecture_id}")
+    @PutMapping("/lectures/{lecture_id}")
     public Lecture updateLecture(@PathVariable(name = "lecture_id") String id, @Validated @RequestBody requestLectureDto existLecture){
         return lectureService.modify(id, existLecture);
     }
 
-    @GetMapping("/lecture/all/{user_id}")
+    @GetMapping("/lectures/{user_id}")
     public List<responseLectureDto> allLecture(@PathVariable(name = "user_id") String id){
         return lectureService.findAll(id);
     }
 
-    @GetMapping("/lecture/{lecture_id}")
+    @GetMapping("/lectures/{lecture_id}")
     public Lecture oneLecture(@PathVariable("lecture_id") String id){
         return lectureService.findOne(id);
     }
 
-    @DeleteMapping("/lecture/{lecture_title}/{lecture_room}")
-    public String deleteLecture(@PathVariable("lecture_title") String title, @PathVariable("lecture_room") Integer room){
+    @DeleteMapping("/lectures/title-class")
+    public String deleteLecture(@RequestParam("lecture_title") String title, @RequestParam("lecture_class") Integer room){
         return lectureService.delete(title, room);
     }
 
-    @PostMapping("/lecture/enroll")
+    @PostMapping("/lectures/students/enroll")
     public String enrollLecture(@Validated @RequestBody requestEnrollDto enroll){
         return enrollService.save(enroll);
     }
 
-    @GetMapping("/lecture/list/{lecture_id}")
+    @GetMapping("/lectures/{lecture_id}/students")
     public List<Users> studentList(@PathVariable("lecture_id") String id){
         return enrollService.findStudentList(id);
     }
 
-    @GetMapping("/lecture/info/{assignment_id}")
+    @GetMapping("/lectures/info/{assignment_id}")
     public responseLectureInfoDto lectureInfo(@PathVariable("assignment_id") String id){
         return lectureService.findLectureInfo(id);
     }

@@ -11,7 +11,7 @@ public class requestAssignmentDto {
     @NotNull
     private UUID lecture_id;
     @NotNull
-    private UUID user_id;
+    private UUID professor_id;
     @NotNull
     private String title;
     private LocalDateTime start_date;
