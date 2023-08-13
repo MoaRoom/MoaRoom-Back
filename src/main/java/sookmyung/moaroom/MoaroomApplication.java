@@ -20,7 +20,8 @@ public class MoaroomApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/**").allowedOrigins("http://moaroom-back.duckdns.org:3000");
+				registry.addMapping("/**").allowedOrigins("https://2876411F1C9663FA39717D8BFE5137AB.gr7.ap-northeast-2.eks.amazonaws.com:8003");
 			}
 		};
 	}
