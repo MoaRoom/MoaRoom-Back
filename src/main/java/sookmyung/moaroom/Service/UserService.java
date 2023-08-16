@@ -62,7 +62,7 @@ public class UserService {
                 reqBody.put("role", newUser.getRole());
                 HttpEntity<?> request = new HttpEntity<>(reqBody, headers);
                 ResponseEntity<responseUrlDto> response = restTemplate.postForEntity(
-                        "http://59.15.113.146:8003/professor/",
+                        "http://a4916313160c74414a3426e5d3b9866c-383499736.ap-northeast-2.elb.amazonaws.com:8003/professor/",
                         request,
                         responseUrlDto.class
                 );
