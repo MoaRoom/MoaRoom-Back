@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
-PROJECT_ROOT="/home/ubuntu/app" #코드가 주입되는 경로
-JAR_FILE="$PROJECT_ROOT/moaroom-backend.jar" #build.gradle에서 설정한 파일명으로 변경
+PROJECT_ORIGIN="/home/ubuntu/server/MoaRoom-Back"
+PROJECT_ROOT="/home/ubuntu/app"
+JAR_FILE="$PROJECT_ROOT/moaroom-backend.jar"
+PROPERTY_FILE="$PROJECT_ROOT/src/main/resources/application.properties"
+PROPERTY_FILE_ORIGIN="$PROJECT_ORIGIN/src/main/resources/application.properties"
+
 
 APP_LOG="$PROJECT_ROOT/logs/application.log"
 ERROR_LOG="$PROJECT_ROOT/logs/error.log"
@@ -11,6 +15,9 @@ TIME_NOW=$(date +%c)
 
 echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG
 cp $PROJECT_ROOT/build/libs/*.jar $JAR_FILE
+
+echo "$TIME_NOW > $PROPERTY_FILE 파일 복사" >> $DEPLOY_LOG
+cp $PROPERTY_FILE_ORIGIN $PROPERTY_FILE
 
 echo "$TIME_NOW > $JAR_FILE 파일 실행" >> $DEPLOY_LOG
 nohup java -jar $JAR_FILE > $APP_LOG 2> $ERROR_LOG &
