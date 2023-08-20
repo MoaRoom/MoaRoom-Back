@@ -39,8 +39,8 @@ public class UserService {
                 newUser.setRole(2);
             }
 
-            if (data.getUserNum() != null) {
-                newUser.setUserNum(data.getUserNum());
+            if (data.getUser_num() != null) {
+                newUser.setUserNum(data.getUser_num());
             } else{
                 newUser.setUserNum(null);
             }
@@ -98,8 +98,8 @@ public class UserService {
                 existUser.setRole(2);
             }
 
-            if(data.getUserNum() != null){
-                existUser.setUserNum(data.getUserNum());
+            if(data.getUser_num() != null){
+                existUser.setUserNum(data.getUser_num());
             }
             return userRepository.save(existUser);
         } catch (Exception e){
