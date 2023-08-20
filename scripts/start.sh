@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-PROJECT_ROOT="/home/ubuntu/server/MoaRoom-Back" #코드가 주입되는 경로
-JAR_FILE="$PROJECT_ROOT/moaroom-backend.jar" #build.gradle에서 설정한 파일명으로 변경
+PROJECT_ROOT="/home/ubuntu/app"
+JAR_FILE="$PROJECT_ROOT/moaroom-backend.jar"
+PROPERTY_FILE="$PROJECT_ROOT/src/main/resources/application.properties"
+
 
 APP_LOG="$PROJECT_ROOT/logs/application.log"
 ERROR_LOG="$PROJECT_ROOT/logs/error.log"
