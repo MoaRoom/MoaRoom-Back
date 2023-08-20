@@ -101,7 +101,7 @@ public class Url {
 - req.body: `assignment_title`
 - return type: `String` "삭제 성공"
 - 
-### 6. [ Get ] `/assignments/{user_id}`
+### 6. [ Get ] `/assignments/users/{user_id}`
 
 - 특정 유저의 과제에 대한 진행상황
 - path variable: user_id
