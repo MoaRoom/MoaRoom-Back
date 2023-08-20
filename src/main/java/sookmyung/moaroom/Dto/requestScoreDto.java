@@ -8,12 +8,12 @@ import java.util.UUID;
 @Data
 public class requestScoreDto {
     @NotNull
-    UUID lectureId;
+    UUID lecture_id;
     @NotNull
-    UUID assignmentId;
+    UUID assignment_id;
 
     @NotNull
-    UUID userId;
+    UUID user_id;
 
     @NotNull
     Integer score;

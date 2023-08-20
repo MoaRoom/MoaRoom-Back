@@ -102,7 +102,7 @@ public class Lecture {
 - req.body: `requestLectureDto`
 - return type: `Lecture`
 
-### 3. [ Get ] `/lectures/{user_id}`
+### 3. [ Get ] `/lectures/users/{user_id}`
 
 - 특정 유저의 강의 정보
 - path variable: user_id

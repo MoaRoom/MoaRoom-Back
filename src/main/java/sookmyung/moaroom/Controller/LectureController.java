@@ -32,7 +32,7 @@ public class LectureController {
         return lectureService.modify(id, existLecture);
     }
 
-    @GetMapping("/lectures/{user_id}")
+    @GetMapping("/lectures/users/{user_id}")
     public List<responseLectureDto> allLecture(@PathVariable(name = "user_id") String id){
         return lectureService.findAll(id);
     }

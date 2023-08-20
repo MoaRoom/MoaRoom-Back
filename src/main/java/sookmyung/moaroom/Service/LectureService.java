@@ -31,11 +31,11 @@ public class LectureService {
             Lecture newLecture = new Lecture();
             newLecture.setLectureId(UUID.randomUUID());
             newLecture.setTitle(data.getTitle());
-            newLecture.setProfessorId(data.getProfessorId());
+            newLecture.setProfessorId(data.getProfessor_id());
             newLecture.setRoom(data.getRoom());
 
-            if (data.getRoomCount()!= null){
-                newLecture.setRoomCount(data.getRoomCount());
+            if (data.getRoom_count()!= null){
+                newLecture.setRoomCount(data.getRoom_count());
             } else {
                 newLecture.setRoomCount(30);
             }
@@ -58,13 +58,13 @@ public class LectureService {
             if (lectureRepository.findById(UUID.fromString(lecture_id)).isEmpty()){
                 throw new Exception("존재하지 않는 강의");
             }
-            if (!data.getProfessorId().equals(existLecture.getProfessorId())){
+            if (!data.getProfessor_id().equals(existLecture.getProfessorId())){
                 throw new Exception("수정 권한이 없는 사용자");
             }
 
             existLecture.setTitle(data.getTitle());
             existLecture.setRoom(data.getRoom());
-            existLecture.setRoomCount(data.getRoomCount());
+            existLecture.setRoomCount(data.getRoom_count());
 
             return lectureRepository.save(existLecture);
         } catch (Exception e){
