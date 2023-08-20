@@ -78,7 +78,7 @@ public class EnrollService {
             reqBody.put("student_info", student_info);
             reqBody.put("lecture_id",data.getLecture_id());
             ResponseEntity<responseUrlDto> response = restTemplate.postForEntity(
-                    "http://a4916313160c74414a3426e5d3b9866c-383499736.ap-northeast-2.elb.amazonaws.com:8003/student/",
+                    "http://af3a1a2d769ff4be9991c752a7a41937-923523649.ap-northeast-2.elb.amazonaws.com:8003/student/",
                     reqBody,
                     responseUrlDto.class
             );
