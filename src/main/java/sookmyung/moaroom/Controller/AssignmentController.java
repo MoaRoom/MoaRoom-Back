@@ -32,7 +32,7 @@ public class AssignmentController {
         return assignmentService.modify(id, existAssignment);
     }
 
-    @GetMapping("/assignments/{user_id}")
+    @GetMapping("/assignments/users/{user_id}")
     public List<responseAssignmentDto> allLecture(@PathVariable("user_id") String id){
         return assignmentService.findAll(id);
     }

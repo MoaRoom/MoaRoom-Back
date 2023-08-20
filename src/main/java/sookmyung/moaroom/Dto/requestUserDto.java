@@ -11,7 +11,7 @@ public class requestUserDto {
     private String password;
     @NotNull
     private String name;
-    private Integer userNum;
+    private Integer user_num;
     @NotNull
     private Integer role;
 
