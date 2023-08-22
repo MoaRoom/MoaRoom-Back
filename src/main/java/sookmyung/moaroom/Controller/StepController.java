@@ -1,6 +1,7 @@
 package sookmyung.moaroom.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sookmyung.moaroom.Dto.requestScoreDto;
 import sookmyung.moaroom.Dto.responseStepDto;
@@ -15,7 +16,7 @@ public class StepController {
     StepService stepService;
 
     @PostMapping("/assignments/score")
-    public void scoring(@RequestBody requestScoreDto score){
+    public void scoring(@Validated @RequestBody requestScoreDto score){
         stepService.scoring(score);
     }
 
