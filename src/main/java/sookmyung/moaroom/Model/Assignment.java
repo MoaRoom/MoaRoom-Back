@@ -35,4 +35,12 @@ public class Assignment {
     private LocalDateTime dueDate;
     @Column(name = "description")
     private String description;
+
+    @Column(name = "answer")
+    @NotNull
+    private String answer;
+
+    @Column(name = "runtime")
+    @NotNull
+    private Double runtime;
 }

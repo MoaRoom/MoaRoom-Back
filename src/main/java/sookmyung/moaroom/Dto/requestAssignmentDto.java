@@ -3,6 +3,7 @@ package sookmyung.moaroom.Dto;
 import com.sun.istack.NotNull;
 import lombok.Data;
 
+import javax.persistence.Column;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,4 +18,8 @@ public class requestAssignmentDto {
     private LocalDateTime start_date;
     private LocalDateTime due_date;
     private String description;
+    @NotNull
+    private String answer;
+    @NotNull
+    private Double runtime;
 }
