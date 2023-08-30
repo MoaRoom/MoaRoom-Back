@@ -47,7 +47,7 @@ public class AssignmentController {
         return assignmentService.delete(title);
     }
 
-    @GetMapping("/assignments/{assignment_id}/students-urls")
+    @GetMapping("/assignments/{assignment_id}/urls")
     public List<Url> studentUrlList(@PathVariable("assignment_id") String id){
         return assignmentService.findStudentUrlList(id);
     }

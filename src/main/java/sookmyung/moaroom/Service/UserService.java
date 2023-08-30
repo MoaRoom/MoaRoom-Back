@@ -70,7 +70,9 @@ public class UserService {
                 // url 테이블에 저장
                 responseUrlDto resdata=response.getBody();
                 Url newUrl = new Url();
-                newUrl.setId(resdata.getId());
+                newUrl.setId(UUID.randomUUID());
+                assert resdata != null;
+                newUrl.setUserId(resdata.getId());
                 newUrl.setLectureId(resdata.getLecture_id());
                 newUrl.setContainerAddress(resdata.getContainer_address());
                 newUrl.setApiEndpoint(resdata.getApi_endpoint());
@@ -146,9 +148,16 @@ public class UserService {
         }
     }
 
-    public Url getUrl(String id){
-        if(urlRepository.findById(UUID.fromString(id)).get() != null){
-               return urlRepository.findById(UUID.fromString(id)).get();
+    public Url getUrl(String userId, String lectureId){
+        if(urlRepository.findByUserIdAndLectureId(UUID.fromString(userId), UUID.fromString(lectureId)) != null){
+               return urlRepository.findByUserIdAndLectureId(UUID.fromString(userId), UUID.fromString(lectureId));
+        }
+        return null;
+    }
+
+    public List<Url> getUrls(String userId){
+        if(urlRepository.findByUserId(UUID.fromString(userId)) != null){
+            return urlRepository.findByUserId(UUID.fromString(userId));
         }
         return null;
     }

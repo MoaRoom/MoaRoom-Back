@@ -48,8 +48,12 @@ public class UserController {
         return userService.delete(id);
     }
 
-    @GetMapping("/urls/{user_id}")
-    public Url getUrl(@PathVariable("user_id") String id){
-        return userService.getUrl(id);
+    @GetMapping("/users/{user_id}/{lecture_id}/url")
+    public Url getUrl(@PathVariable("user_id") String userId, @PathVariable("lecture_id") String lectureId){
+        return userService.getUrl(userId, lectureId);
+    }
+    @GetMapping("/users/{user_id}/urls")
+    public List<Url> getUrls(@PathVariable("user_id") String userId){
+        return userService.getUrls(userId);
     }
 }
