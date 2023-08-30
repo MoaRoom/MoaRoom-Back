@@ -37,8 +37,10 @@ public class AssignmentService {
         int step = -1;
         Assignment newAssignment = new Assignment();
         newAssignment.setAssignmentId(UUID.randomUUID());
-        newAssignment.setTitle(data.getTitle().toString());
+        newAssignment.setTitle(data.getTitle());
         newAssignment.setLectureId(data.getLecture_id());
+        newAssignment.setAnswer(data.getAnswer());
+        newAssignment.setRuntime(data.getRuntime());
         if (data.getStart_date()==null) {
             LocalDateTime now = LocalDateTime.now();
             newAssignment.setStartDate(now);
@@ -75,6 +77,8 @@ public class AssignmentService {
         reqBody.put("start_date", newAssignment.getStartDate());
         reqBody.put("due_date", newAssignment.getDueDate());
         reqBody.put("description", newAssignment.getDescription());
+        reqBody.put("answer", newAssignment.getAnswer());
+        reqBody.put("runtime", newAssignment.getRuntime());
         HttpEntity<?> request = new HttpEntity<>(reqBody, headers);
         ResponseEntity<Boolean> response = restTemplate.postForEntity(
                 user_url+"/assignments/",
@@ -108,6 +112,8 @@ public class AssignmentService {
             }
 
             existAssignment.setTitle(data.getTitle());
+            existAssignment.setAnswer(data.getAnswer());
+            existAssignment.setRuntime(data.getRuntime());
 
             if (data.getStart_date()!=null) {
                 existAssignment.setStartDate(data.getStart_date());
@@ -159,7 +165,7 @@ public class AssignmentService {
     public Assignment findOne(String id){
         try {
             Assignment assignment = assignmentRepository.findByAssignmentId(UUID.fromString(id));
-            if (assignment.equals(null)){
+            if (assignment == null){
                 throw new Exception("찾는 과제 없음");
             }
             return assignment;
