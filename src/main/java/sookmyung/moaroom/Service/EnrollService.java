@@ -87,7 +87,8 @@ public class EnrollService {
             // url 테이블에 저장
             responseUrlDto resdata=response.getBody();
             Url newUrl = new Url();
-            newUrl.setId(resdata.getId());
+            newUrl.setId(UUID.randomUUID());
+            newUrl.setUserId(resdata != null ? resdata.getId() : null);
             newUrl.setLectureId(resdata.getLecture_id());
             newUrl.setContainerAddress(resdata.getContainer_address());
             newUrl.setApiEndpoint(resdata.getApi_endpoint());

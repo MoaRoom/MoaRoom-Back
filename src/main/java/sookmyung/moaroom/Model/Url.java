@@ -23,6 +23,10 @@ public class Url {
     @NotNull
     @Column(name = "id")
     private UUID id;
+
+    @NotNull
+    @Column(name = "user_id")
+    private UUID userId;
     @Column(name = "lecture_id")
     private UUID lectureId;
 
