@@ -2,10 +2,12 @@ package sookmyung.moaroom.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sookmyung.moaroom.Dto.requestAutoScoreDto;
 import sookmyung.moaroom.Dto.requestScoreDto;
 import sookmyung.moaroom.Dto.responseStepDto;
 import sookmyung.moaroom.Model.*;
 import sookmyung.moaroom.Model.Process;
+import sookmyung.moaroom.Respository.AssignmentRepository;
 import sookmyung.moaroom.Respository.StepRepository;
 import sookmyung.moaroom.Respository.UserRepository;
 
@@ -18,6 +20,8 @@ import java.util.UUID;
 public class StepService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    AssignmentRepository assignmentRepository;
     @Autowired
     StepRepository stepRepository;
     @Autowired
@@ -78,6 +82,23 @@ public class StepService {
             stepRepository.save(existStep);
         }
 
+    }
+
+    public void autoScoring(String id, requestAutoScoreDto data){
+        // 과제 아이디로 정답과 런타임 불러오기
+        Assignment assignment = assignmentRepository.findByAssignmentId(UUID.fromString(id));
+
+        // 데이터 안에 있는 답과 런타임과 비교
+        int score = 0;
+        if(assignment.getAnswer().equals(data.getAnswer()) && assignment.getRuntime() >= data.getRuntime()){
+            score = 100;
+        }
+
+        // 진행상황과 점수 반영 - step table , 점수는 0 또는 100
+        Step step = stepRepository.findByAssignmentIdAndUserId(UUID.fromString(id),data.getUser_id());
+        step.setStep(3);
+        step.setScore(score);
+        stepRepository.save(step);
     }
 
     public List<responseStepDto> findStepList(String assignment_id){

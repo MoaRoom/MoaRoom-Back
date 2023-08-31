@@ -3,6 +3,7 @@ package sookmyung.moaroom.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import sookmyung.moaroom.Dto.requestAutoScoreDto;
 import sookmyung.moaroom.Dto.requestScoreDto;
 import sookmyung.moaroom.Dto.responseStepDto;
 import sookmyung.moaroom.Model.Step;
@@ -18,6 +19,11 @@ public class StepController {
     @PostMapping("/assignments/score")
     public void scoring(@Validated @RequestBody requestScoreDto score){
         stepService.scoring(score);
+    }
+
+    @PostMapping("/assignments/{assignment_id}/auto")
+    public void autoScoring(@PathVariable(name = "assignment_id") String id, @Validated @RequestBody requestAutoScoreDto data){
+        stepService.autoScoring(id, data);
     }
 
     @GetMapping("/steps/{assignment_id}")
