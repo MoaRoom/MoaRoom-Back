@@ -62,7 +62,7 @@ public class AssignmentService {
 
         assignmentRepository.save(newAssignment);
 
-        Url professorUrl = urlRepository.findById(data.getProfessor_id()).get();
+        Url professorUrl = urlRepository.findByUserIdAndLectureId(data.getProfessor_id(),data.getProfessor_id());
         final String user_url = professorUrl.getApiEndpoint();
 
         // infra측에 req: users model, res: url model

@@ -15,4 +15,6 @@ public interface StepRepository extends JpaRepository<Step, StepPK> {
     public List<Step> findByAssignmentId(UUID assignmentId);
 
     public List<Step> findByUserId(UUID userId);
+
+    public Step findByAssignmentIdAndUserId(UUID assignmentId, UUID userId);
 }
