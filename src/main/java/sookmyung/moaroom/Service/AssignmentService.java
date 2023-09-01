@@ -187,11 +187,11 @@ public class AssignmentService {
     public List<Url> findStudentUrlList(String id){
         UUID lectureId = assignmentRepository.findByAssignmentId(UUID.fromString(id)).getLectureId();
         List<Users> usersList = enrollService.findStudentList(lectureId.toString());
+        System.out.println(usersList);
         List<Url> studentUrlList = new ArrayList<>();
-        for (int i=0; i<usersList.size();i++){
-            Users student = usersList.get(i);
-            Url existUrl = urlRepository.findById(student.getUserId()).get();
-            if (existUrl != null){
+        for (Users student : usersList) {
+            Url existUrl = urlRepository.findByUserIdAndLectureId(student.getUserId(), lectureId);
+            if (existUrl != null) {
                 studentUrlList.add(existUrl);
             }
         }
