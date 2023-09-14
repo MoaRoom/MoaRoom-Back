@@ -86,7 +86,7 @@ public class StepService {
 
     public void autoScoring(String id, requestAutoScoreDto data){
         Step step = stepRepository.findByAssignmentIdAndUserId(UUID.fromString(id),data.getUser_id());
-        if (step.getStep() != Process.DONE.getRole()){
+        //if (step.getStep() != Process.DONE.getRole()){
             // 과제 아이디로 정답과 런타임 불러오기
             Assignment assignment = assignmentRepository.findByAssignmentId(UUID.fromString(id));
 
@@ -100,7 +100,7 @@ public class StepService {
             step.setStep(3);
             step.setScore(score);
             stepRepository.save(step);
-        }
+        //}
     }
 
     public List<responseStepDto> findStepList(String assignment_id){
