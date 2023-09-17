@@ -4,12 +4,14 @@ import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Entity
@@ -36,9 +38,11 @@ public class Assignment {
     @Column(name = "description")
     private String description;
 
+
+    @Type(type = "list_str")
     @Column(name = "answer")
     @NotNull
-    private String answer;
+    private ArrayList<String> answer;
 
     @Column(name = "runtime")
     @NotNull
