@@ -102,6 +102,14 @@ public class StepService {
         stepRepository.save(step);
         //}
     }
+    public String setStepDone(String assignment_id, String professor_id){
+        Step step = stepRepository.findByAssignmentIdAndUserId(UUID.fromString(assignment_id),UUID.fromString(professor_id));
+        step.setStep(Process.DONE.getRole());
+        stepRepository.save(step);
+        System.out.println(step);
+
+        return "과제 채점 완료";
+    }
 
     public List<responseStepDto> findStepList(String assignment_id){
         List<Step> stepList = stepRepository.findByAssignmentId(UUID.fromString(assignment_id));
