@@ -26,6 +26,14 @@ public class StepController {
         stepService.autoScoring(id, data);
     }
 
+    // 일괄 채점 후 교수의 step을 채점 완료로 바꿔야 함
+    @GetMapping("steps/assignments/{assignment_id}/professor/{professor_id}")
+    public String setStepDone(@PathVariable(name="assignment_id") String assignment_id, @PathVariable(name="professor_id") String professor_id){
+        return stepService.setStepDone(assignment_id, professor_id);
+    }
+
+
+
     @GetMapping("/steps/{assignment_id}")
     public List<responseStepDto> findStepList(@PathVariable(name = "assignment_id") String id){
         return stepService.findStepList(id);
