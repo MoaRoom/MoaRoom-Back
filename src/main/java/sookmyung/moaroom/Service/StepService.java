@@ -92,7 +92,7 @@ public class StepService {
 
         // 데이터 안에 있는 답과 런타임과 비교
         int score = 0;
-        if(assignment.getAnswer().contains(data.getAnswer()) && assignment.getRuntime() >= data.getRuntime()){
+        if(assignment.getAnswer().equals(data.getAnswer()) && assignment.getRuntime() >= data.getRuntime()){
             score = 100;
         }
 
